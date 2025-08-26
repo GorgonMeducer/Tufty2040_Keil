@@ -213,7 +213,7 @@ typedef size_t         ee_size_t;
 #endif
 
 #ifndef ITERATIONS
-#define ITERATIONS  3000
+#define ITERATIONS  6000
 #endif
 
 /* Variable : default_num_contexts
