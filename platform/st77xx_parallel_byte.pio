@@ -1,0 +1,8 @@
+.program st77xx_parallel_byte
+.side_set 1 opt
+loop:
+    pull block              
+    out pins, 8 side 0     
+    nop         side 1 [1]
+    jmp loop
+

@@ -1,0 +1,278 @@
+
+/*
+ * st7789_simple.c - 极简 ST7789 8080 并口（RP2040 + PIO）
+ */
+#include "st7789_simple.h"
+
+#include <stddef.h>
+#include "pico/stdlib.h"
+#include "hardware/pio.h"
+#include "hardware/gpio.h"
+#include "hardware/clocks.h"
+#include "hardware/dma.h"
+#include "hardware/gpio.h"
+#include "hardware/pio.h"
+
+#include "st77xx_parallel_stream.pio.h"
+#include "st77xx_parallel_byte.pio.h"
+
+// ---- 命令常量 ----
+#define ST77_CMD_SWRESET  0x01
+#define ST77_CMD_SLPIN    0x10
+#define ST77_CMD_SLPOUT   0x11
+#define ST77_CMD_INVOFF   0x20
+#define ST77_CMD_INVON    0x21
+#define ST77_CMD_GAMSET   0x26
+#define ST77_CMD_DISPON   0x29
+#define ST77_CMD_CASET    0x2A
+#define ST77_CMD_RASET    0x2B
+#define ST77_CMD_RAMWR    0x2C
+#define ST77_CMD_MADCTL   0x36
+#define ST77_CMD_COLMOD   0x3A
+
+// MADCTL 位
+#define MADCTL_MY  0x80
+#define MADCTL_MX  0x40
+#define MADCTL_MV  0x20
+#define MADCTL_ML  0x10
+#define MADCTL_BGR 0x08
+#define MADCTL_MH  0x04
+
+// ---- 全局/静态句柄 ----
+static PIO   s_pio;
+static uint  s_sm;
+static int   s_prog_offset;
+
+  enum reg {
+    SWRESET   = 0x01,
+    TEOFF     = 0x34,
+    TEON      = 0x35,
+    MADCTL    = 0x36,
+    COLMOD    = 0x3A,
+    RAMCTRL   = 0xB0,
+    GCTRL     = 0xB7,
+    VCOMS     = 0xBB,
+    LCMCTRL   = 0xC0,
+    VDVVRHEN  = 0xC2,
+    VRHS      = 0xC3,
+    VDVS      = 0xC4,
+    FRCTRL2   = 0xC6,
+    PWCTRL1   = 0xD0,
+    PORCTRL   = 0xB2,
+    GMCTRP1   = 0xE0,
+    GMCTRN1   = 0xE1,
+    INVOFF    = 0x20,
+    SLPOUT    = 0x11,
+    DISPON    = 0x29,
+    GAMSET    = 0x26,
+    DISPOFF   = 0x28,
+    RAMWR     = 0x2C,
+    INVON     = 0x21,
+    CASET     = 0x2A,
+    RASET     = 0x2B,
+    PWMFRSEL  = 0xCC
+  };
+  
+
+// ---- 工具：GPIO 快速宏 ----
+#define DATA_PIN_MASK   (0xFFu << ST7789_PIN_D0)
+
+__STATIC_INLINE void dc_command(void) { gpio_put(ST7789_PIN_DC, 0); }
+__STATIC_INLINE void dc_data(void)    { gpio_put(ST7789_PIN_DC, 1); }
+
+__STATIC_INLINE void cs_select(void)  { if (ST7789_PIN_CS >= 0) gpio_put(ST7789_PIN_CS, 0); }
+__STATIC_INLINE void cs_deselect(void)
+{ 
+    while(!pio_sm_is_tx_fifo_empty(s_pio, s_sm)) tight_loop_contents(); 
+
+    if (ST7789_PIN_CS >= 0) gpio_put(ST7789_PIN_CS, 1); 
+}
+
+__STATIC_INLINE void rst_assert(void) { if (ST7789_PIN_RST >= 0) gpio_put(ST7789_PIN_RST, 0); }
+__STATIC_INLINE void rst_deassert(void){if (ST7789_PIN_RST >= 0) gpio_put(ST7789_PIN_RST, 1); }
+
+__STATIC_INLINE void bl_on(void)      { if (ST7789_PIN_BL  >= 0) gpio_put(ST7789_PIN_BL, 1); }
+
+
+__STATIC_INLINE 
+void pio_write_u8(uint8_t v) {
+    pio_sm_put_blocking(s_pio, s_sm, (uint32_t)v);
+}
+
+static void write_cmd(uint8_t cmd) {
+    dc_command();
+    cs_select();
+    pio_write_u8(cmd);
+    cs_deselect();
+}
+
+static void __write_cmd_with_data(uint8_t cmd, uint8_t *pchData, size_t tSize) {
+    dc_command();
+    cs_select();
+    pio_write_u8(cmd);
+    cs_deselect();
+    cs_select();
+    dc_data();
+    do {
+        pio_write_u8(*pchData++);
+    } while(--tSize);
+    
+    cs_deselect();
+}
+
+#define write_cmd_with_data(__CMD, ...)                     \
+do {                                                        \
+    uint8_t chData[] = {                                    \
+        __VA_ARGS__,                                        \
+    };                                                      \
+    __write_cmd_with_data(__CMD, chData, sizeof(chData));   \
+} while(0)
+
+#define write_cmd_with_obj(__CMD, __OBJ)                                \
+do {                                                                    \
+    __write_cmd_with_data(__CMD, (uint8_t *)&(__OBJ), sizeof(__OBJ));   \
+} while(0)
+
+
+static void set_addr_window(int16_t x, int16_t y, int16_t w, int16_t h)
+{
+
+    if (x < 0) { w += x; x = 0; }
+    if (y < 0) { h += y; y = 0; }
+    if (x + w > ST7789_WIDTH)  w = ST7789_WIDTH  - x;
+    if (y + h > ST7789_HEIGHT) h = ST7789_HEIGHT - y;
+    if (w <= 0 || h <= 0) return;
+
+    uint16_t x0 = (uint16_t)x;
+    uint16_t x1 = (uint16_t)(x + w - 1);
+    uint16_t y0 = (uint16_t)y;
+    uint16_t y1 = (uint16_t)(y + h - 1);
+
+    write_cmd_with_data(CASET, (x0 >> 8), (x0 & 0xFF), (x1 >> 8), (x1 & 0xFF));
+    write_cmd_with_data(RASET, (y0 >> 8), (y0 & 0xFF), (y1 >> 8), (y1 & 0xFF));
+}
+
+
+void st7789_Init(void) {
+
+    s_pio = (ST7789_PIO_INSTANCE == 0) ? pio0 : pio1;
+    s_sm  = pio_claim_unused_sm(s_pio, true);;
+
+
+    gpio_init(ST7789_PIN_DC);  gpio_set_function(ST7789_PIN_DC, GPIO_FUNC_SIO); gpio_set_dir(ST7789_PIN_DC, GPIO_OUT);
+
+    if (ST7789_PIN_CS  >= 0) { gpio_init(ST7789_PIN_CS);  gpio_set_function(ST7789_PIN_CS, GPIO_FUNC_SIO); gpio_set_dir(ST7789_PIN_CS, GPIO_OUT); gpio_put(ST7789_PIN_CS, 1); }
+    if (ST7789_PIN_RST >= 0) { gpio_init(ST7789_PIN_RST); gpio_set_function(ST7789_PIN_RST, GPIO_FUNC_SIO); gpio_set_dir(ST7789_PIN_RST,GPIO_OUT); gpio_put(ST7789_PIN_RST,1); }
+    if (ST7789_PIN_BL  >= 0) { gpio_init(ST7789_PIN_BL);  gpio_set_function(ST7789_PIN_BL, GPIO_FUNC_SIO); gpio_set_dir(ST7789_PIN_BL, GPIO_OUT); gpio_put(ST7789_PIN_BL, 0); }
+
+
+    for (int i = 0; i < 8; ++i) {
+        gpio_init(ST7789_PIN_D0 + i);
+        gpio_set_function(ST7789_PIN_D0 + i, (s_pio == pio0) ? GPIO_FUNC_PIO0 : GPIO_FUNC_PIO1);
+    }
+    gpio_set_function(ST7789_PIN_WR, (s_pio == pio0) ? GPIO_FUNC_PIO0 : GPIO_FUNC_PIO1);
+
+    gpio_set_function(ST7789_PIN_RD,  GPIO_FUNC_SIO);
+    gpio_set_dir(ST7789_PIN_RD, GPIO_OUT);
+    gpio_put(ST7789_PIN_RD, 1);
+
+
+    s_prog_offset = pio_add_program(s_pio, &st77xx_parallel_byte_program);
+
+
+    pio_sm_config c = st77xx_parallel_byte_program_get_default_config(s_prog_offset);
+
+    sm_config_set_out_pins(&c, ST7789_PIN_D0, 8);
+
+    sm_config_set_sideset_pins(&c, ST7789_PIN_WR);
+
+    sm_config_set_out_shift(&c, true /*shift_right*/, false /*autopull*/, 0 /*threshold unused*/);
+
+    sm_config_set_clkdiv(&c, ST7789_PIO_CLKDIV);
+
+
+    pio_sm_init(s_pio, s_sm, s_prog_offset, &c);
+    pio_sm_set_consecutive_pindirs(s_pio, s_sm, ST7789_PIN_D0, 8, true);
+    pio_sm_set_consecutive_pindirs(s_pio, s_sm, ST7789_PIN_WR, 1, true);
+    pio_sm_set_enabled(s_pio, s_sm, true);
+
+
+    if (ST7789_PIN_RST >= 0) {
+        rst_assert();  sleep_ms(20);
+        rst_deassert();sleep_ms(120);
+    } else {
+        write_cmd(ST77_CMD_SWRESET);
+        sleep_ms(150);
+    }
+    
+    write_cmd_with_data(COLMOD, 0x05);
+    write_cmd_with_data(PORCTRL, 0x0c, 0x0c, 0x00, 0x33, 0x33);
+    write_cmd_with_data(LCMCTRL, 0x2c);
+    write_cmd_with_data(VDVVRHEN, 0x01);
+    write_cmd_with_data(VRHS, 0x12);
+    write_cmd_with_data(VDVS, 0x20);
+    write_cmd_with_data(PWCTRL1, 0xa4, 0xa1);
+    write_cmd_with_data(FRCTRL2, 0x0f);
+    
+    write_cmd_with_data(RAMCTRL, 0x00, 0xc0);
+    
+    /* 320 * 240 */
+    write_cmd_with_data(GCTRL, 0x35);
+    write_cmd_with_data(VCOMS, 0x1f);
+    write_cmd_with_data(GMCTRP1, 0xD0, 0x08, 0x11, 0x08, 0x0C, 0x15, 0x39, 0x33, 0x50, 0x36, 0x13, 0x14, 0x29, 0x2D);
+    write_cmd_with_data(GMCTRN1, 0xD0, 0x08, 0x10, 0x08, 0x06, 0x06, 0x39, 0x44, 0x51, 0x0B, 0x16, 0x14, 0x2F, 0x31);
+
+    write_cmd(INVON);   // set inversion mode
+    write_cmd(SLPOUT);  // leave sleep mode
+    write_cmd(DISPON);  // turn display on
+    
+    
+    do {
+        uint8_t madctl;
+        uint16_t caset[2] = {0, 319};
+        uint16_t raset[2] = {0, 239};
+
+        enum uint8_t {
+            ROW_ORDER   = 0x80, //0b10000000,
+            COL_ORDER   = 0x40, //0b01000000,
+            SWAP_XY     = 0x20, //0b00100000,  // AKA "MV"
+            SCAN_ORDER  = 0x10, //0b00010000,
+            RGB_BGR     = 0x08, //0b00001000,
+            HORIZ_ORDER = 0x04, //0b00000100
+        };
+
+        madctl = COL_ORDER | SWAP_XY | SCAN_ORDER;
+
+        // Byte swap the 16bit rows/cols values
+        caset[0] = __builtin_bswap16(caset[0]);
+        caset[1] = __builtin_bswap16(caset[1]);
+        raset[0] = __builtin_bswap16(raset[0]);
+        raset[1] = __builtin_bswap16(raset[1]);
+
+        write_cmd_with_obj(CASET,  caset);
+        write_cmd_with_obj(RASET,  raset);
+        write_cmd_with_obj(MADCTL, madctl);
+    } while(0);
+
+    sleep_ms(20);
+
+    // 开背光
+    bl_on();
+}
+
+
+void st7789_DrawBitmap(int16_t x, int16_t y, int16_t width, int16_t height, const uint8_t *pchBitmap) 
+{
+
+    assert( ((uintptr_t)pchBitmap & 0x03) == 0);
+
+    set_addr_window(x, y, width, height);
+    size_t total = (size_t)width * (size_t)height * sizeof(uint16_t);
+    
+    __write_cmd_with_data(RAMWR, (uint8_t *)pchBitmap, total);
+}
+
+void Disp0_DrawBitmap(int16_t x, int16_t y, int16_t width, int16_t height, const uint8_t *pchBitmap)
+{
+    st7789_DrawBitmap(x, y, width, height, pchBitmap);
+}

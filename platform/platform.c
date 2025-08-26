@@ -21,6 +21,8 @@
 #include "arm_2d_helper.h"
 #include "arm_2d_disp_adapters.h"
 
+#include "st7789_simple.h"
+
 /*============================ MACROS ========================================*/
 /*============================ MACROFIED FUNCTIONS ===========================*/
 /*============================ TYPES =========================================*/
@@ -57,4 +59,5 @@ void platform_init(void)
 #endif
     stdio_init_all();
 
+    st7789_Init();
 }

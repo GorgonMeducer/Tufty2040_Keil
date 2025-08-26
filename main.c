@@ -45,6 +45,16 @@ void scene_qrcode_loader(void)
     arm_2d_scene_qrcode_init(&DISP0_ADAPTER);
 }
 
+void scene_watch_face_01_loader(void) 
+{
+    arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
+}
+
+void scene_matrix_loader(void) 
+{
+    arm_2d_scene_matrix_init(&DISP0_ADAPTER);
+}
+
 
 typedef struct demo_scene_t {
     int32_t nLastInMS;
@@ -53,7 +63,7 @@ typedef struct demo_scene_t {
 
 static demo_scene_t const c_SceneLoaders[] = {
 
-#if 1
+#if 0
     {
         5000,
         scene_qrcode_loader,
@@ -65,7 +75,7 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_rickrolling_loader,
+        scene_matrix_loader,
         //scene_qrcode_loader,
         //scene_mono_clock_loader
     },
