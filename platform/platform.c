@@ -45,6 +45,24 @@ void Disp0_DrawBitmap(  int16_t x,
     st7789_draw_bitmap(x, y, width, height, pchBitmap);
 }
 
+#if __DISP0_CFG_ENABLE_ASYNC_FLUSHING__
+void __disp_adapter0_request_async_flushing(void *pTarget,
+                                            bool bIsNewFrame,
+                                            int16_t iX, 
+                                            int16_t iY,
+                                            int16_t iWidth,
+                                            int16_t iHeight,
+                                            const uint16_t *phwBuffer)
+{
+    st7789_draw_bitmap_async(iX, iY, iWidth, iHeight, (const uint8_t *)phwBuffer);
+}
+
+void st7789_insert_async_flush_cpl_evt_handler(void)
+{
+    disp_adapter0_insert_async_flushing_complete_event_handler();
+}
+#endif
+
 void platform_init(void)
 {
     extern void SystemCoreClockUpdate();

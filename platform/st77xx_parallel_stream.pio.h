@@ -8,31 +8,30 @@
 #include "hardware/pio.h"
 #endif
 
-// ---------------------- //
-// st77xx_parallel_stream //
-// ---------------------- //
+// --------------------------- //
+// st77xx_parallel_stream_auto //
+// --------------------------- //
 
-#define st77xx_parallel_stream_wrap_target 0
-#define st77xx_parallel_stream_wrap 2
+#define st77xx_parallel_stream_auto_wrap_target 0
+#define st77xx_parallel_stream_auto_wrap 1
 
-static const uint16_t st77xx_parallel_stream_program_instructions[] = {
+static const uint16_t st77xx_parallel_stream_auto_program_instructions[] = {
             //     .wrap_target
     0x7008, //  0: out    pins, 8         side 0     
     0xb942, //  1: nop                    side 1 [1] 
-    0x0000, //  2: jmp    0                          
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
-static const struct pio_program st77xx_parallel_stream_program = {
-    .instructions = st77xx_parallel_stream_program_instructions,
-    .length = 3,
+static const struct pio_program st77xx_parallel_stream_auto_program = {
+    .instructions = st77xx_parallel_stream_auto_program_instructions,
+    .length = 2,
     .origin = -1,
 };
 
-static inline pio_sm_config st77xx_parallel_stream_program_get_default_config(uint offset) {
+static inline pio_sm_config st77xx_parallel_stream_auto_program_get_default_config(uint offset) {
     pio_sm_config c = pio_get_default_sm_config();
-    sm_config_set_wrap(&c, offset + st77xx_parallel_stream_wrap_target, offset + st77xx_parallel_stream_wrap);
+    sm_config_set_wrap(&c, offset + st77xx_parallel_stream_auto_wrap_target, offset + st77xx_parallel_stream_auto_wrap);
     sm_config_set_sideset(&c, 2, true, false);
     return c;
 }

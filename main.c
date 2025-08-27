@@ -45,6 +45,12 @@ void scene_qrcode_loader(void)
     arm_2d_scene_qrcode_init(&DISP0_ADAPTER);
 }
 
+void scene_compass_loader(void) 
+{
+    arm_2d_scene_compass_init(&DISP0_ADAPTER);
+}
+
+
 void scene_watch_face_01_loader(void) 
 {
     arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
@@ -75,7 +81,7 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_matrix_loader,
+        scene_watch_face_01_loader,
         //scene_qrcode_loader,
         //scene_mono_clock_loader
     },

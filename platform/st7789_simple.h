@@ -43,6 +43,11 @@ void st7789_draw_bitmap( int16_t x,
                         int16_t height, 
                         const uint8_t *pchBitmap);
 
+void st7789_draw_bitmap_async(  int16_t x,
+                                int16_t y,
+                                int16_t width,
+                                int16_t height,
+                                const uint8_t *pchBitmap);
 
 #ifdef __cplusplus
 }

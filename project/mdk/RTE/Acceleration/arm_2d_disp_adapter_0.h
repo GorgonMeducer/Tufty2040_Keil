@@ -102,7 +102,7 @@ extern "C" {
 // <o>Height of the PFB block
 // <i> The height of your PFB block size used in disp0
 #ifndef __DISP0_CFG_PFB_BLOCK_HEIGHT__
-#   define __DISP0_CFG_PFB_BLOCK_HEIGHT__                          240
+#   define __DISP0_CFG_PFB_BLOCK_HEIGHT__                          120
 #endif
 
 // <o>Width Alignment of generated PFBs
@@ -136,7 +136,7 @@ extern "C" {
 // <o>PFB Block Count <1-65535>
 // <i> The number of blocks in the PFB pool.
 #ifndef __DISP0_CFG_PFB_HEAP_SIZE__
-#   define __DISP0_CFG_PFB_HEAP_SIZE__                             1
+#   define __DISP0_CFG_PFB_HEAP_SIZE__                             2
 #endif
 
 // </h>
@@ -151,7 +151,7 @@ extern "C" {
 // <i> Configure the default navigation layer of this display adapter. 
 // <i> NOTE: Disable the navigation layer will also remove the real-time FPS display.
 #ifndef __DISP0_CFG_NAVIGATION_LAYER_MODE__
-#   define __DISP0_CFG_NAVIGATION_LAYER_MODE__                     0
+#   define __DISP0_CFG_NAVIGATION_LAYER_MODE__                     1
 #endif
 
 // <o>Number of iterations <0-2000>
@@ -219,7 +219,7 @@ extern "C" {
 // <q>Enable the helper service for Asynchronous Flushing
 // <i> Please select this option when using asynchronous flushing, e.g. DMA + ISR 
 #ifndef __DISP0_CFG_ENABLE_ASYNC_FLUSHING__
-#   define __DISP0_CFG_ENABLE_ASYNC_FLUSHING__                     0
+#   define __DISP0_CFG_ENABLE_ASYNC_FLUSHING__                     1
 #endif
 
 // <q>Enable the helper service for 3FB (LCD Direct Mode)
