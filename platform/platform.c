@@ -37,9 +37,13 @@ void SysTick_Handler(void)
 }
 
 __WEAK
-void Disp0_DrawBitmap(int16_t x, int16_t y, int16_t width, int16_t height, const uint8_t *pchBitmap)
+void Disp0_DrawBitmap(  int16_t x, 
+                        int16_t y, 
+                        int16_t width, 
+                        int16_t height, 
+                        const uint8_t *pchBitmap)
 {
-
+    st7789_draw_bitmap(x, y, width, height, pchBitmap);
 }
 
 void platform_init(void)
@@ -59,5 +63,5 @@ void platform_init(void)
 #endif
     stdio_init_all();
 
-    st7789_Init();
+    st7789_init();
 }

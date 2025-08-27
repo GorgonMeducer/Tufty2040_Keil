@@ -130,7 +130,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=724,527,1135,1029,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(1009=120,153,364,299,0)</Name>
+          <Name>(1010=1593,250,2004,752,1)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(1009=120,153,364,299,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -540,7 +540,7 @@
 
   <Group>
     <GroupName>::Acceleration</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>1</RteFlg>
