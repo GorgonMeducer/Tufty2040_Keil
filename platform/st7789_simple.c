@@ -491,7 +491,7 @@ void st7789_init(void)
     write_cmd_with_data(VDVS,       0x20);
     write_cmd_with_data(PWCTRL1,    0xa4, 0xa1);
     write_cmd_with_data(FRCTRL2,    0x0f);
-    
+    write_cmd_with_data(GAMSET,     0x01);
     write_cmd_with_data(RAMCTRL,    0x00, 0xc0);
     
     /* 320 * 240 */
@@ -502,6 +502,7 @@ void st7789_init(void)
     write_cmd_with_data(GMCTRN1,    0xD0, 0x08, 0x10, 0x08, 0x06, 0x06, 0x39, 
                                     0x44, 0x51, 0x0B, 0x16, 0x14, 0x2F, 0x31);
 
+    
     write_cmd(INVON);   // set inversion mode
     write_cmd(SLPOUT);  // leave sleep mode
     write_cmd(DISPON);  // turn display on
