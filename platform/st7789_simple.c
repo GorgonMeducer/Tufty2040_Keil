@@ -155,7 +155,8 @@ void cs_deselect(void)
 { 
     while(!pio_sm_is_tx_fifo_empty(ST7789_PIO, s_sm)) { 
         tight_loop_contents();
-    }; 
+    };
+    pio_sm_set_enabled(s_pio, s_sm, false);
 
     if (ST7789_PIN_CS >= 0) {
         gpio_put(ST7789_PIN_CS, 1);
@@ -206,7 +207,6 @@ void st7789_pio_stream_dma_irq(void)
         dma_channel_acknowledge_irq0(dma_chan);
         dma_channel_set_irq0_enabled(dma_chan, false);
         cs_deselect();
-        //pio_sm_set_enabled(s_pio, s_sm, false);
 
         st7789_insert_async_flush_cpl_evt_handler();
     }
@@ -245,7 +245,7 @@ void st7789_pio_stream_init(void)
     sm_config_set_clkdiv(&c, div);
 
     pio_sm_init(s_pio, s_sm, offset, &c);
-    pio_sm_set_enabled(s_pio, s_sm, true);
+    pio_sm_set_enabled(s_pio, s_sm, false);
 
     dma_chan = dma_claim_unused_channel(true);
 
@@ -280,14 +280,13 @@ void st7789_pio_stream_send(const uint8_t *src, size_t len)
         dma_channel_set_irq0_enabled(dma_chan, false);
         irq_clear_pending(DMA_IRQ_0);
     }
-
+    pio_sm_set_enabled(s_pio, s_sm, true);
     dma_channel_start(dma_chan);
 
     dma_channel_wait_for_finish_blocking(dma_chan);
     
     dma_channel_acknowledge_irq0(dma_chan);
     irq_clear_pending(DMA_IRQ_0);
-
 }
 
 static
@@ -305,6 +304,7 @@ void st7789_pio_stream_send_async(const uint8_t *src, size_t len)
         dma_channel_set_irq0_enabled(dma_chan, true);
     }
 
+    pio_sm_set_enabled(s_pio, s_sm, true);
     dma_channel_start(dma_chan);
 }
 
