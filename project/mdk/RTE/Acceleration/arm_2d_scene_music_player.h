@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-#ifndef __ARM_2D_SCENE_MATRIX_H__
-#define __ARM_2D_SCENE_MATRIX_H__
+#ifndef __ARM_2D_SCENE_MUSIC_PLAYER_H__
+#define __ARM_2D_SCENE_MUSIC_PLAYER_H__
 
 /*============================ INCLUDES ======================================*/
 
@@ -51,90 +51,87 @@ extern "C" {
 /*============================ MACROS ========================================*/
 
 /* OOC header, please DO NOT modify  */
-#ifdef __USER_SCENE_MATRIX_IMPLEMENT__
+#ifdef __USER_SCENE_MUSIC_PLAYER_IMPLEMENT__
 #   define __ARM_2D_IMPL__
 #endif
-#ifdef __USER_SCENE_MATRIX_INHERIT__
+#ifdef __USER_SCENE_MUSIC_PLAYER_INHERIT__
 #   define __ARM_2D_INHERIT__
 #endif
 #include "arm_2d_utils.h"
 
-#ifndef MATRIX_LETTER_TRAIN_USE_BLUR
-#   define MATRIX_LETTER_TRAIN_USE_BLUR           0
-#endif
-
-
-#ifndef MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT    5
-#endif
-
-#ifndef MATRIX_LETTER_TRAIN_MID_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_MID_STAGE_COUNT    10
-#endif
-
-#ifndef MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT   10
-#endif
-
-#if !MATRIX_LETTER_TRAIN_USE_BLUR
-#   undef MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT      0
-#endif
-
-#define MATRIX_LETTER_TRAIN_COUNT                   \
-        (   MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT     \
-        +   MATRIX_LETTER_TRAIN_MID_STAGE_COUNT     \
-        +   MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT    )
-
 /*============================ MACROFIED FUNCTIONS ===========================*/
 
 /*!
- * \brief initalize scene_matrix and add it to a user specified scene player
+ * \brief initalize scene_music_player and add it to a user specified scene player
  * \param[in] __DISP_ADAPTER_PTR the target display adapter (i.e. scene player)
  * \param[in] ... this is an optional parameter. When it is NULL, a new 
- *            user_scene_matrix_t will be allocated from HEAP and freed on
+ *            user_scene_music_player_t will be allocated from HEAP and freed on
  *            the deposing event. When it is non-NULL, the life-cycle is managed
  *            by user.
- * \return user_scene_matrix_t* the user_scene_matrix_t instance
+ * \return user_scene_music_player_t* the user_scene_music_player_t instance
  */
-#define arm_2d_scene_matrix_init(__DISP_ADAPTER_PTR, ...)                       \
-            __arm_2d_scene_matrix_init( (__DISP_ADAPTER_PTR),                   \
-                                        (NULL, ##__VA_ARGS__))
+#define arm_2d_scene_music_player_init(__DISP_ADAPTER_PTR, ...)                    \
+            __arm_2d_scene_music_player_init((__DISP_ADAPTER_PTR), (NULL, ##__VA_ARGS__))
 
 /*============================ TYPES =========================================*/
 
-typedef struct {
-    arm_2d_region_t tRegion;
+enum {
+    DIRTY_REGION_ITEM_PLAY_TIME = 0,
+    __DIRTY_REGION_ITEM_COUNT,
+};
 
-    uint32_t u2Stage            : 2;
-    uint32_t                    : 6;
-    uint32_t u8RandomSeed       : 8;
-    uint32_t u16NumberOfChars   : 16;
-
-    
-
-
-} __letter_train_t;
-
+typedef uint8_t __histogram_frame_t[64];
 
 /*!
- * \brief a user class for scene matrix
+ * \brief a user class for scene music_player
  */
-typedef struct user_scene_matrix_t user_scene_matrix_t;
+typedef struct user_scene_music_player_t user_scene_music_player_t;
 
-struct user_scene_matrix_t {
+struct user_scene_music_player_t {
     implement(arm_2d_scene_t);                                                  //! derived from class: arm_2d_scene_t
 
 ARM_PRIVATE(
     /* place your private member here, following two are examples */
-    int64_t lTimestamp[2];
-    bool bUserAllocated;
+    int64_t lTimestamp[3];
 
-#if MATRIX_LETTER_TRAIN_USE_BLUR
-    arm_2d_filter_iir_blur_descriptor_t tBlurOP;
-#endif
+    struct {
+        uint32_t nMusicTimeInMs;
+        int16_t iPlayProgress;
 
-    __letter_train_t tTrains[MATRIX_LETTER_TRAIN_COUNT];
+        uint16_t u6Secends                      : 6;
+        uint16_t                                : 2;    
+        uint16_t u6Mins                         : 6;
+        uint16_t                                : 1;
+        uint16_t bUserAllocated                 : 1;
+
+        arm_2d_helper_dirty_region_item_t tDirtyRegionItems[__DIRTY_REGION_ITEM_COUNT];
+    };
+
+    struct {
+        spin_zoom_widget_t tWidget;
+        int16_t iRadius;
+        int16_t iPivotOffset;
+        float fScaling;
+    } AlbumCover;
+
+    struct {
+        histogram_t tWidget;
+        histogram_bin_item_t tBins[64];
+
+        __histogram_frame_t *ptFrame;
+    } Histogram;
+
+    struct {
+        text_box_c_str_reader_t tStringReader;
+        text_box_t tTextBox;
+        uint8_t chOpacity;
+        arm_2d_size_t tSize;
+        int64_t lFullHeight;
+        int64_t lPosition;
+    } Lyrics;
+
+
+
 )
     /* place your public member here */
     
@@ -145,9 +142,9 @@ ARM_PRIVATE(
 
 ARM_NONNULL(1)
 extern
-user_scene_matrix_t *__arm_2d_scene_matrix_init(
-                                        arm_2d_scene_player_t *ptDispAdapter, 
-                                        user_scene_matrix_t *ptScene);
+user_scene_music_player_t *__arm_2d_scene_music_player_init(
+                                        arm_2d_scene_player_t *ptDispAdapter,
+                                        user_scene_music_player_t *ptScene);
 
 #if defined(__clang__)
 #   pragma clang diagnostic pop
@@ -155,8 +152,8 @@ user_scene_matrix_t *__arm_2d_scene_matrix_init(
 #   pragma GCC diagnostic pop
 #endif
 
-#undef __USER_SCENE_MATRIX_IMPLEMENT__
-#undef __USER_SCENE_MATRIX_INHERIT__
+#undef __USER_SCENE_MUSIC_PLAYER_IMPLEMENT__
+#undef __USER_SCENE_MUSIC_PLAYER_INHERIT__
 
 #ifdef   __cplusplus
 }
