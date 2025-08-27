@@ -122,7 +122,7 @@ enum {
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
 static uint32_t s_sm;
-
+static PIO s_pio;
 /*============================ PROTOTYPES ====================================*/
 /*============================ IMPLEMENTATION ================================*/
 __STATIC_INLINE 
@@ -184,7 +184,7 @@ void bl_on(void)
 __STATIC_INLINE 
 void pio_write_u8(uint8_t v) 
 {
-    pio_sm_put_blocking(ST7789_PIO, s_sm, (uint32_t)v);
+    pio_sm_put_blocking(s_pio, s_sm, (uint32_t)v);
 }
 
 static void write_cmd(uint8_t cmd) 
@@ -227,6 +227,7 @@ static void set_addr_window(int16_t x, int16_t y, int16_t w, int16_t h)
 
 void st7789_init(void)
 {
+    s_pio = ST7789_PIO;
     gpio_init(ST7789_PIN_DC);  
     gpio_set_function(ST7789_PIN_DC, GPIO_FUNC_SIO); 
     gpio_set_dir(ST7789_PIN_DC, GPIO_OUT);
