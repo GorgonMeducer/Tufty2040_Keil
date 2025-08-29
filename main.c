@@ -50,6 +50,11 @@ void scene_user_defined_opcode_loader(void)
     arm_2d_scene_user_defined_opcode_init(&DISP0_ADAPTER);
 }
 
+void scene_space_badge_loader(void) 
+{
+    arm_2d_scene_space_badge_init(&DISP0_ADAPTER);
+}
+
 void scene_music_player_loader(void) 
 {
     arm_2d_scene_music_player_init(&DISP0_ADAPTER);
@@ -86,7 +91,7 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_user_defined_opcode_loader,
+        scene_space_badge_loader,
         //scene_qrcode_loader,
         //scene_mono_clock_loader
     },
