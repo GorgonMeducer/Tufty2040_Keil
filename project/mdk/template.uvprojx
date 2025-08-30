@@ -337,7 +337,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>-include "app_cfg.h"</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
               <IncludePath>.</IncludePath>
@@ -388,6 +388,11 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\app_cfg.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -482,7 +487,7 @@
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.0" condition="Arm-2D-Demos">
+      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.3" condition="Arm-2D-Demos">
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
@@ -898,17 +903,17 @@
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </file>
-      <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_space_badge.c" version="0.8.0">
+      <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_space_badge.c" version="0.8.3">
         <instance index="0">RTE\Acceleration\arm_2d_scene_space_badge.c</instance>
-        <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.0" condition="Arm-2D-Demos"/>
+        <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.3" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </file>
-      <file attr="config" category="header" name="examples\demos\arm_2d_scene_space_badge.h" version="0.8.0">
+      <file attr="config" category="header" name="examples\demos\arm_2d_scene_space_badge.h" version="0.8.3">
         <instance index="0">RTE\Acceleration\arm_2d_scene_space_badge.h</instance>
-        <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.0" condition="Arm-2D-Demos"/>
+        <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.3" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
@@ -1008,7 +1013,7 @@
       </file>
       <file attr="config" category="sourceC" name="examples\demos\space_fleet.c" version="1.0.0">
         <instance index="0">RTE\Acceleration\space_fleet.c</instance>
-        <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.0" condition="Arm-2D-Demos"/>
+        <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="0.8.3" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
