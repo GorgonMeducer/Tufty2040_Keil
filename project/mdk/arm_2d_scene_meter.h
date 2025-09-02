@@ -16,20 +16,25 @@
  * limitations under the License.
  */
 
-#ifndef __ARM_2D_SCENE_RICKROLLING_H__
-#define __ARM_2D_SCENE_RICKROLLING_H__
+#ifndef __ARM_2D_SCENE_METER_H__
+#define __ARM_2D_SCENE_METER_H__
 
 /*============================ INCLUDES ======================================*/
-
 #if defined(_RTE_)
 #   include "RTE_Components.h"
 #endif
 
-#if defined(RTE_Acceleration_Arm_2D_Helper_PFB)                                 \
-&&  defined(RTE_Acceleration_Arm_2D_Extra_JPEG_Loader)
+#if defined(RTE_Acceleration_Arm_2D_Helper_PFB)
 
+#include "arm_2d.h"
+
+#include "arm_2d_helper_scene.h"
 #include "arm_2d_helper.h"
-#include "arm_2d_example_loaders.h"
+#include "arm_2d_example_controls.h"
+
+#if defined(RTE_Acceleration_Arm_2D_Extra_TJpgDec_Loader)
+#   include "arm_2d_example_loaders.h"
+#endif
 
 #ifdef   __cplusplus
 extern "C" {
@@ -42,6 +47,7 @@ extern "C" {
 #   pragma clang diagnostic ignored "-Wmissing-declarations"
 #   pragma clang diagnostic ignored "-Wpadded"
 #elif __IS_COMPILER_ARM_COMPILER_5__
+#   pragma diag_suppress=1296,1,64,177
 #elif __IS_COMPILER_GCC__
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wformat="
@@ -52,66 +58,74 @@ extern "C" {
 /*============================ MACROS ========================================*/
 
 /* OOC header, please DO NOT modify  */
-#ifdef __USER_SCENE_RICKROLLING_IMPLEMENT__
+#ifdef __USER_SCENE_METER_IMPLEMENT__
+#   undef __USER_SCENE_METER_IMPLEMENT__
 #   define __ARM_2D_IMPL__
-#endif
-#ifdef __USER_SCENE_RICKROLLING_INHERIT__
-#   define __ARM_2D_INHERIT__
 #endif
 #include "arm_2d_utils.h"
 
-
-#ifndef ARM_2D_DEMO_JPGD_USE_FILE
-#   define ARM_2D_DEMO_JPGD_USE_FILE  0
+#ifndef ARM_2D_SCENE_METER_USE_JPG
+#   define ARM_2D_SCENE_METER_USE_JPG       0
 #endif
 
-#ifndef ARM_2D_DEMO_USE_ZJPGD
-#   define ARM_2D_DEMO_USE_ZJPGD       1
+#ifndef ARM_2D_SCENE_METER_USE_ZJPGD
+#   define ARM_2D_SCENE_METER_USE_ZJPGD     1
+#endif
+
+#if !defined(RTE_Acceleration_Arm_2D_Extra_JPEG_Loader)
+#   undef  ARM_2D_SCENE_METER_USE_JPG
+#   define ARM_2D_SCENE_METER_USE_JPG       0
 #endif
 
 /*============================ MACROFIED FUNCTIONS ===========================*/
 
 /*!
- * \brief initalize scene_rickrolling and add it to a user specified scene player
+ * \brief initalize scene_meter and add it to a user specified scene player
  * \param[in] __DISP_ADAPTER_PTR the target display adapter (i.e. scene player)
  * \param[in] ... this is an optional parameter. When it is NULL, a new 
- *            user_scene_rickrolling_t will be allocated from HEAP and freed on
+ *            user_scene_meter_t will be allocated from HEAP and freed on
  *            the deposing event. When it is non-NULL, the life-cycle is managed
  *            by user.
- * \return user_scene_rickrolling_t* the user_scene_rickrolling_t instance
+ * \return user_scene_meter_t* the user_scene_meter_t instance
  */
-#define arm_2d_scene_rickrolling_init(__DISP_ADAPTER_PTR, ...)                  \
-            __arm_2d_scene_rickrolling_init((__DISP_ADAPTER_PTR),               \
-                                            (NULL, ##__VA_ARGS__))
+#define arm_2d_scene_meter_init(__DISP_ADAPTER_PTR, ...)                    \
+            __arm_2d_scene_meter_init((__DISP_ADAPTER_PTR), (NULL, ##__VA_ARGS__))
 
 /*============================ TYPES =========================================*/
 /*!
- * \brief a user class for scene rickrolling
+ * \brief a user class for scene meter
  */
-typedef struct user_scene_rickrolling_t user_scene_rickrolling_t;
+typedef struct user_scene_meter_t user_scene_meter_t;
 
-struct user_scene_rickrolling_t {
+struct user_scene_meter_t {
     implement(arm_2d_scene_t);                                                  //! derived from class: arm_2d_scene_t
 
 ARM_PRIVATE(
     /* place your private member here, following two are examples */
-    int64_t lTimestamp[1];
+    int64_t lTimestamp[2];
+
+    int16_t iNumber;
+    int16_t iTargetNumber;
+    
     bool bUserAllocated;
 
-#if ARM_2D_DEMO_USE_ZJPGD
-    arm_zjpgd_loader_t tAnimation;
+    meter_pointer_t tMeterPointer;
+
+#if ARM_2D_SCENE_METER_USE_JPG
+#   if ARM_2D_SCENE_METER_USE_ZJPGD
+    arm_zjpgd_loader_t tJPGBackground;
     union {
         arm_zjpgd_io_file_loader_t tFile;
         arm_zjpgd_io_binary_loader_t tBinary;
     } LoaderIO;
-#else
-    arm_tjpgd_loader_t tAnimation;
+#   else
+    arm_tjpgd_loader_t tJPGBackground;
     union {
         arm_tjpgd_io_file_loader_t tFile;
         arm_tjpgd_io_binary_loader_t tBinary;
     } LoaderIO;
+#   endif
 #endif
-    arm_2d_helper_film_t tFilm;
 
 )
     /* place your public member here */
@@ -123,18 +137,14 @@ ARM_PRIVATE(
 
 ARM_NONNULL(1)
 extern
-user_scene_rickrolling_t *__arm_2d_scene_rickrolling_init(
-                                        arm_2d_scene_player_t *ptDispAdapter, 
-                                        user_scene_rickrolling_t *ptScene);
+user_scene_meter_t *__arm_2d_scene_meter_init(   arm_2d_scene_player_t *ptDispAdapter, 
+                                        user_scene_meter_t *ptScene);
 
 #if defined(__clang__)
 #   pragma clang diagnostic pop
 #elif __IS_COMPILER_GCC__
 #   pragma GCC diagnostic pop
 #endif
-
-#undef __USER_SCENE_RICKROLLING_IMPLEMENT__
-#undef __USER_SCENE_RICKROLLING_INHERIT__
 
 #ifdef   __cplusplus
 }
@@ -143,3 +153,4 @@ user_scene_rickrolling_t *__arm_2d_scene_rickrolling_init(
 #endif
 
 #endif
+

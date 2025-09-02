@@ -25,6 +25,9 @@
 #include "arm_2d_scenes.h"
 #include "arm_2d_demos.h"
 
+#include "arm_2d_scene_histogram.h"
+#include "arm_2d_scene_meter.h"
+
 
 /*============================ MACROS ========================================*/
 /*============================ MACROFIED FUNCTIONS ===========================*/
@@ -38,6 +41,16 @@
 void scene_rickrolling_loader(void) 
 {
     arm_2d_scene_rickrolling_init(&DISP0_ADAPTER);
+}
+
+void scene_histogram_loader(void) 
+{
+    arm_2d_scene_histogram_init(&DISP0_ADAPTER);
+}
+
+void scene_meter_loader(void) 
+{
+    arm_2d_scene_meter_init(&DISP0_ADAPTER);
 }
 
 void scene_qrcode_loader(void) 
@@ -91,6 +104,9 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
+        //scene_meter_loader,
+        //scene_histogram_loader,
+        //scene_rickrolling_loader,
         scene_space_badge_loader,
         //scene_qrcode_loader,
         //scene_mono_clock_loader

@@ -31,6 +31,14 @@ extern "C" {
 #define SPACE_BADGE_90TH_BATTLE_STYLE       0
 #define SPACE_BADGE_EXPLOSION_SPEED         16
 
+#define ARM_2D_DEMO_USE_ZJPGD               1
+
+#define ARM_2D_SCENE_HISTOGRAM_USE_JPG      1
+#define ARM_2D_SCENE_HISTOGRAM_USE_ZJPGD    0
+
+#define ARM_2D_SCENE_METER_USE_JPG          1
+#define ARM_2D_SCENE_METER_USE_ZJPGD        1
+
 
 /*============================ MACROFIED FUNCTIONS ===========================*/
 /*============================ TYPES =========================================*/
