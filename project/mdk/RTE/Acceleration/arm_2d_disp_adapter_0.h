@@ -130,13 +130,19 @@ extern "C" {
 //     <7=>   128 pixel
 // <i> Make sure the y and height of the PFB is always aligned to 2^n pixels
 #ifndef __DISP0_CFG_PFB_PIXEL_ALIGN_HEIGHT__
-#   define __DISP0_CFG_PFB_PIXEL_ALIGN_HEIGHT__                    0
+#   define __DISP0_CFG_PFB_PIXEL_ALIGN_HEIGHT__                    1
 #endif
 
 // <o>PFB Block Count <1-65535>
 // <i> The number of blocks in the PFB pool.
 #ifndef __DISP0_CFG_PFB_HEAP_SIZE__
 #   define __DISP0_CFG_PFB_HEAP_SIZE__                             2
+#endif
+
+// <q>Disable Dynamic PFB optimization
+// <i> Selecting this option will disable the dynamic PFB optimisation. Please do NOT select this unless you are sure about the consequences. 
+#ifndef __DISP0_CFG_DISABLE_DYNAMIC_PFB__
+#   define __DISP0_CFG_DISABLE_DYNAMIC_PFB__                       0
 #endif
 
 // </h>
@@ -201,7 +207,7 @@ extern "C" {
 // <q> Enable Dirty Region Optimization Service
 // <i> Optimize dirty regions to avoid fresh overlapped areas
 #ifndef __DISP0_CFG_OPTIMIZE_DIRTY_REGIONS__
-#   define __DISP0_CFG_OPTIMIZE_DIRTY_REGIONS__                    1
+#   define __DISP0_CFG_OPTIMIZE_DIRTY_REGIONS__                    0
 #endif
 
 // <o> Dirty Region Pool Size <4-255>
@@ -334,7 +340,26 @@ extern "C" {
         };                                                                      \
         ARM_2D_SAFE_NAME(ret);})
 
+#define DISP_ADAPTER0_NANO_DRAW()                                               \
+                                                                                \
+    arm_using(const arm_2d_tile_t *ptTile = NULL)                               \
+        arm_using(bool bIsNewFrame = true)                                      \
+            for (__disp_adapter0_draw_t *ARM_2D_SAFE_NAME(ptUserDraw) = NULL;   \
+                (({ ARM_2D_SAFE_NAME(ptUserDraw)                                \
+                        = __disp_adapter0_nano_draw();                          \
+                    if (NULL != ARM_2D_SAFE_NAME(ptUserDraw)) {                 \
+                        ptTile = ARM_2D_SAFE_NAME(ptUserDraw)->ptTile;          \
+                        bIsNewFrame = ARM_2D_SAFE_NAME(ptUserDraw)->bIsNewFrame;\
+                    };                                                          \
+                    (NULL != ARM_2D_SAFE_NAME(ptUserDraw));                     \
+                    }));)
 /*============================ TYPES =========================================*/
+
+typedef struct {
+    arm_2d_tile_t *ptTile;
+    bool bIsNewFrame;
+} __disp_adapter0_draw_t;
+
 /*============================ GLOBAL VARIABLES ==============================*/
 ARM_NOINIT
 extern
@@ -348,6 +373,14 @@ void disp_adapter0_init(void);
 extern
 arm_fsm_rt_t __disp_adapter0_task(void);
 
+extern
+arm_2d_scene_t *disp_adapter0_nano_prepare(void);
+
+extern
+__disp_adapter0_draw_t * __disp_adapter0_nano_draw(void);
+
+extern
+arm_2d_scene_t *disp_adapter0_get_default_scene(void);
 
 #if __DISP0_CFG_VIRTUAL_RESOURCE_HELPER__
 /*!

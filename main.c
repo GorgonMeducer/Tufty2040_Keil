@@ -43,6 +43,11 @@ void scene_rickrolling_loader(void)
     arm_2d_scene_rickrolling_init(&DISP0_ADAPTER);
 }
 
+void scene_panel_loader(void) 
+{
+    arm_2d_scene_panel_init(&DISP0_ADAPTER);
+}
+
 void scene_histogram_loader(void) 
 {
     arm_2d_scene_histogram_init(&DISP0_ADAPTER);
@@ -99,15 +104,17 @@ static demo_scene_t const c_SceneLoaders[] = {
     },
     {
         20000,
-        scene_rickrolling_loader,
+        scene_music_player_loader,
     },
 #else
     {
         .fnLoader = 
+        scene_panel_loader,
+        //scene_music_player_loader,
         //scene_meter_loader,
         //scene_histogram_loader,
         //scene_rickrolling_loader,
-        scene_space_badge_loader,
+        //scene_space_badge_loader,
         //scene_qrcode_loader,
         //scene_mono_clock_loader
     },

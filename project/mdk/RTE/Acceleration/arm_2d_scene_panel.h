@@ -16,18 +16,16 @@
  * limitations under the License.
  */
 
-#ifndef __ARM_2D_SCENE_MATRIX_H__
-#define __ARM_2D_SCENE_MATRIX_H__
+#ifndef __ARM_2D_SCENE_PANEL_H__
+#define __ARM_2D_SCENE_PANEL_H__
 
 /*============================ INCLUDES ======================================*/
 
-#if defined(_RTE_)
-#   include "RTE_Components.h"
-#endif
+#include "arm_2d.h"
 
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB)
 
-#include "arm_2d_helper.h"
+#include "arm_2d_helper_scene.h"
 #include "arm_2d_example_controls.h"
 
 #ifdef   __cplusplus
@@ -51,90 +49,43 @@ extern "C" {
 /*============================ MACROS ========================================*/
 
 /* OOC header, please DO NOT modify  */
-#ifdef __USER_SCENE_MATRIX_IMPLEMENT__
+#ifdef __USER_SCENE_PANEL_IMPLEMENT__
+#   undef __USER_SCENE_PANEL_IMPLEMENT__
 #   define __ARM_2D_IMPL__
 #endif
-#ifdef __USER_SCENE_MATRIX_INHERIT__
-#   define __ARM_2D_INHERIT__
-#endif
 #include "arm_2d_utils.h"
-
-#ifndef MATRIX_LETTER_TRAIN_USE_BLUR
-#   define MATRIX_LETTER_TRAIN_USE_BLUR           0
-#endif
-
-
-#ifndef MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT    30
-#endif
-
-#ifndef MATRIX_LETTER_TRAIN_MID_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_MID_STAGE_COUNT    30
-#endif
-
-#ifndef MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT   10
-#endif
-
-#if !MATRIX_LETTER_TRAIN_USE_BLUR
-#   undef MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT
-#   define MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT      0
-#endif
-
-#define MATRIX_LETTER_TRAIN_COUNT                   \
-        (   MATRIX_LETTER_TRAIN_FAR_STAGE_COUNT     \
-        +   MATRIX_LETTER_TRAIN_MID_STAGE_COUNT     \
-        +   MATRIX_LETTER_TRAIN_NEAR_STAGE_COUNT    )
 
 /*============================ MACROFIED FUNCTIONS ===========================*/
 
 /*!
- * \brief initalize scene_matrix and add it to a user specified scene player
- * \param[in] __DISP_ADAPTER_PTR the target display adapter (i.e. scene player)
+ * \brief initalize scene2 and add it to a user specified scene player
+ * \param[in] __DISP_ADAPTER_PTR the target display adatper (i.e. scene player)
  * \param[in] ... this is an optional parameter. When it is NULL, a new 
- *            user_scene_matrix_t will be allocated from HEAP and freed on
+ *            user_scene_panel_t will be allocated from HEAP and freed on
  *            the deposing event. When it is non-NULL, the life-cycle is managed
  *            by user.
- * \return user_scene_matrix_t* the user_scene_matrix_t instance
+ * \return user_scene_panel_t* the user_scene_panel_t instance
  */
-#define arm_2d_scene_matrix_init(__DISP_ADAPTER_PTR, ...)                       \
-            __arm_2d_scene_matrix_init( (__DISP_ADAPTER_PTR),                   \
-                                        (NULL, ##__VA_ARGS__))
+#define arm_2d_scene_panel_init(__DISP_ADAPTER_PTR, ...)                    \
+            __arm_2d_scene_panel_init((__DISP_ADAPTER_PTR), (NULL, ##__VA_ARGS__))
 
 /*============================ TYPES =========================================*/
-
-typedef struct {
-    arm_2d_region_t tRegion;
-
-    uint32_t u2Stage            : 2;
-    uint32_t                    : 6;
-    uint32_t u8RandomSeed       : 8;
-    uint32_t u16NumberOfChars   : 16;
-
-    
-
-
-} __letter_train_t;
-
-
 /*!
- * \brief a user class for scene matrix
+ * \brief a user class for scene 2
  */
-typedef struct user_scene_matrix_t user_scene_matrix_t;
+typedef struct user_scene_panel_t user_scene_panel_t;
 
-struct user_scene_matrix_t {
+struct user_scene_panel_t {
     implement(arm_2d_scene_t);                                                  //! derived from class: arm_2d_scene_t
 
 ARM_PRIVATE(
     /* place your private member here, following two are examples */
-    int64_t lTimestamp[2];
+    int64_t lTimestamp[5];
     bool bUserAllocated;
-
-#if MATRIX_LETTER_TRAIN_USE_BLUR
-    arm_2d_filter_iir_blur_descriptor_t tBlurOP;
-#endif
-
-    __letter_train_t tTrains[MATRIX_LETTER_TRAIN_COUNT];
+    uint8_t chOpacity;
+    int16_t iProgress;
+    number_list_t tNumberList[3];
+    progress_wheel_t tWheel;
 )
     /* place your public member here */
     
@@ -145,18 +96,14 @@ ARM_PRIVATE(
 
 ARM_NONNULL(1)
 extern
-user_scene_matrix_t *__arm_2d_scene_matrix_init(
-                                        arm_2d_scene_player_t *ptDispAdapter, 
-                                        user_scene_matrix_t *ptScene);
+user_scene_panel_t *__arm_2d_scene_panel_init(   arm_2d_scene_player_t *ptDispAdapter, 
+                                        user_scene_panel_t *ptScene);
 
 #if defined(__clang__)
 #   pragma clang diagnostic pop
 #elif __IS_COMPILER_GCC__
 #   pragma GCC diagnostic pop
 #endif
-
-#undef __USER_SCENE_MATRIX_IMPLEMENT__
-#undef __USER_SCENE_MATRIX_INHERIT__
 
 #ifdef   __cplusplus
 }

@@ -62,7 +62,7 @@ extern "C" {
 // <i> Note that enabling this feature will add the support for a special colour type: ARM_2D_CHANNEL_8in32
 // <i> This feature is disabled by default to save code size
 #ifndef __ARM_2D_CFG_SUPPORT_COLOUR_CHANNEL_ACCESS__
-#   define __ARM_2D_CFG_SUPPORT_COLOUR_CHANNEL_ACCESS__             1
+#   define __ARM_2D_CFG_SUPPORT_COLOUR_CHANNEL_ACCESS__             0
 #endif
 
 // <q>Enable ccca8888(ARGB8888) implicit conversion 
@@ -81,12 +81,12 @@ extern "C" {
 // <q>Support Scaling for A1, A2 and A4 fonts
 // <i> Note that enabling this feature will reduces performance when using A1, A2 and A4 fonts when using scaling.
 #ifndef __ARM_2D_CFG_SUPPORT_TRANSFORM_FOR_NON_A8_FONTS__
-#   define __ARM_2D_CFG_SUPPORT_TRANSFORM_FOR_NON_A8_FONTS__        1
+#   define __ARM_2D_CFG_SUPPORT_TRANSFORM_FOR_NON_A8_FONTS__        0
 #endif
 
 // <c1> Return frame is SKIPPED when there is nothing to draw
 // <i> When a frame is skipped, return ARM_2D_RT_FRAME_SKIPPED to indicate this.
-#define __ARM_2D_CFG_PFB_RETURN_SKIPPED__  
+//#define __ARM_2D_CFG_PFB_RETURN_SKIPPED__  
 // </c>
 
 // </h>
@@ -170,14 +170,14 @@ extern "C" {
 
 // <c1> Disable Dirty Region Optimization Algorithm permanently in PFB helper service
 // <i> This option is used to remove dirty region optimization in PFB helper service. Warning: Some of the application behaviours would be affected, and the dirty region debug mode is no longer available. Disable the dirty region optimization can reduce memory footprint.
-//#define __ARM_2D_CFG_PFB_DISABLE_DIRTY_REGION_OPTIMIZATION__
+#define __ARM_2D_CFG_PFB_DISABLE_DIRTY_REGION_OPTIMIZATION__
 // </c>
 
 // <q> When opacity is 255, call the non-opacity version of API implicitily
 // <i> This option is used to improve the performance and reduce the application complexity in API selection. Disable this feature allows linker to remove unused APIs further.
 // <i> This option is enabled by default
 #ifndef __ARM_2D_CFG_CALL_NON_OPACITY_VERSION_IMPLICITILY_FOR_255__
-#   define __ARM_2D_CFG_CALL_NON_OPACITY_VERSION_IMPLICITILY_FOR_255__         1
+#   define __ARM_2D_CFG_CALL_NON_OPACITY_VERSION_IMPLICITILY_FOR_255__         0
 #endif
 
 // <q> Optimize the scaler version of transform operations for pointer-like resources
@@ -198,7 +198,7 @@ extern "C" {
 // <i> Ignore the user application code when a PFB is output of the areas that generated with the layout assistant. Enabling this feature can improve the user application performance. This feature is disabled by default. It is recommended when you trys to optimize the application performance.
 // <i> If you see some visual elements are imcomplete, you can choose those layout assistants with "_open" as posfix in corresonding area. For example, arm_2d_align_centre() can be changed to arm_2d_align_centre_open().
 #ifndef __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__
-#   define __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__              1
+#   define __ARM_2D_CFG_OPTIMIZE_FOR_PFB_IN_LAYOUT_ASSISTANT__              0
 #endif
 
 // </h>
@@ -219,7 +219,7 @@ extern "C" {
 // <o> The size of the LCD printf text buffer <16-65535>
 // <i> The text buffer size for the lcd printf service. It determins how many character you can use in one printf string.
 #ifndef __LCD_PRINTF_CFG_TEXT_BUFFER_SIZE__
-#   define __LCD_PRINTF_CFG_TEXT_BUFFER_SIZE__                          512
+#   define __LCD_PRINTF_CFG_TEXT_BUFFER_SIZE__                          256
 #endif
 
 // <h>Benchmark
