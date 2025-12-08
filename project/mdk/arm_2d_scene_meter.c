@@ -136,8 +136,9 @@ static void __on_scene_meter_load(arm_2d_scene_t *ptScene)
     ARM_2D_UNUSED(ptThis);
 
     meter_pointer_on_load(&this.tMeterPointer);
-
-#if ARM_2D_SCENE_METER_USE_JPG
+#if ARM_2D_SCENE_METER_USE_QOI
+    arm_qoi_loader_on_load(&this.tQOIBackground);
+#elif ARM_2D_SCENE_METER_USE_JPG
 #   if ARM_2D_SCENE_METER_USE_ZJPGD
     arm_zjpgd_loader_on_load(&this.tJPGBackground);
 #   else
@@ -158,7 +159,9 @@ static void __on_scene_meter_depose(arm_2d_scene_t *ptScene)
     user_scene_meter_t *ptThis = (user_scene_meter_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
 
-#if ARM_2D_SCENE_METER_USE_JPG
+#if ARM_2D_SCENE_METER_USE_QOI
+    arm_qoi_loader_depose(&this.tQOIBackground);
+#elif ARM_2D_SCENE_METER_USE_JPG
 #   if ARM_2D_SCENE_METER_USE_ZJPGD
     arm_zjpgd_loader_depose(&this.tJPGBackground);
 #   else
@@ -206,7 +209,9 @@ static void __on_scene_meter_frame_start(arm_2d_scene_t *ptScene)
     user_scene_meter_t *ptThis = (user_scene_meter_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
 
-#if ARM_2D_SCENE_METER_USE_JPG
+#if ARM_2D_SCENE_METER_USE_QOI
+    arm_qoi_loader_on_frame_start(&this.tQOIBackground);
+#elif ARM_2D_SCENE_METER_USE_JPG
 #   if ARM_2D_SCENE_METER_USE_ZJPGD
     arm_zjpgd_loader_on_frame_start(&this.tJPGBackground);
 #   else
@@ -220,8 +225,8 @@ static void __on_scene_meter_frame_start(arm_2d_scene_t *ptScene)
 
     do {
         /* generate a new position every 2000 sec */
-        if (arm_2d_helper_is_time_out(3000,  &this.lTimestamp[1])) {
-            this.lTimestamp[1] = 0;
+        if (arm_2d_helper_is_time_out(3000,  &this.lTimestamp[0])) {
+            this.lTimestamp[0] = 0;
             srand(arm_2d_helper_get_system_timestamp());
             this.iTargetNumber = rand() % 240;
         }
@@ -230,7 +235,14 @@ static void __on_scene_meter_frame_start(arm_2d_scene_t *ptScene)
     } while(0);
 
     do {
+    #if ARM_2D_SCENE_METER_SHOW_FPS
+        int16_t iNumber = MIN(( arm_2d_helper_get_reference_clock_frequency() 
+                              / ptScene->ptPlayer->Benchmark.wAverage), 
+                              999);
+    #else
         int16_t iNumber = meter_pointer_get_current_value(&this.tMeterPointer);
+    #endif
+
         bool bNumberUnchanged = (this.iNumber == iNumber);
 
         this.iNumber = iNumber;
@@ -239,7 +251,6 @@ static void __on_scene_meter_frame_start(arm_2d_scene_t *ptScene)
                                             bNumberUnchanged); 
 
     } while(0);
-
     
 }
 
@@ -250,7 +261,9 @@ static void __on_scene_meter_frame_complete(arm_2d_scene_t *ptScene)
 
     meter_pointer_on_frame_complete(&this.tMeterPointer);
 
-#if ARM_2D_SCENE_METER_USE_JPG
+#if ARM_2D_SCENE_METER_USE_QOI
+    arm_qoi_loader_on_frame_complete(&this.tQOIBackground);
+#elif ARM_2D_SCENE_METER_USE_JPG
 #   if ARM_2D_SCENE_METER_USE_ZJPGD
     arm_zjpgd_loader_on_frame_complete(&this.tJPGBackground);
 #   else
@@ -258,12 +271,6 @@ static void __on_scene_meter_frame_complete(arm_2d_scene_t *ptScene)
 #   endif
 #endif
 
-#if 0
-    /* switch to next scene after 15s */
-    if (arm_2d_helper_is_time_out(15000, &this.lTimestamp[0])) {
-        arm_2d_scene_player_switch_to_next_scene(ptScene->ptPlayer);
-    }
-#endif
 }
 
 static void __before_scene_meter_switching_out(arm_2d_scene_t *ptScene)
@@ -286,7 +293,22 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_meter_handler)
         
         /* following code is just a demo, you can remove them */
 
-    #if !ARM_2D_SCENE_METER_USE_JPG 
+    #if ARM_2D_SCENE_METER_USE_QOI
+        arm_2d_align_centre(__canvas, this.tQOIBackground.vres.tTile.tRegion.tSize) {
+            arm_2d_tile_copy_only(  &this.tQOIBackground.vres.tTile,
+                                    ptTile,
+                                    &__centre_region);
+
+        }
+    #elif ARM_2D_SCENE_METER_USE_JPG
+        arm_2d_align_centre(__canvas, this.tJPGBackground.vres.tTile.tRegion.tSize) {
+
+            arm_2d_tile_copy_only(  &this.tJPGBackground.vres.tTile,
+                                    ptTile,
+                                    &__centre_region);
+
+        }
+    #else
         arm_2d_align_centre(__canvas, c_tileMeterPanel.tRegion.tSize) {
 
             arm_2d_tile_copy_with_src_mask_only(    &c_tileMeterPanel,
@@ -294,14 +316,6 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_meter_handler)
                                                     ptTile,
                                                     &__centre_region);
             
-        }
-    #else
-        arm_2d_align_centre(__canvas, this.tJPGBackground.vres.tTile.tRegion.tSize) {
-
-            arm_2d_tile_copy_only(  &this.tJPGBackground.vres.tTile,
-                                    ptTile,
-                                    &__centre_region);
-
         }
     #endif
 
@@ -332,14 +346,16 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_meter_handler)
                         arm_lcd_text_set_opacity(255);
                     }
                     
-                    /* print "km/h" */
+                    /* print "FPS" */
                     __item_line_vertical(tTextSize.iWidth,16) {
-                        arm_2d_align_centre(__item_region, 4*6, 8) {
-                            arm_lcd_text_set_font((const arm_2d_font_t *)&ARM_2D_FONT_6x8);
-                            arm_lcd_text_set_draw_region(&__centre_region);
-                            arm_lcd_text_set_colour( GLCD_COLOR_DARK_GREY, GLCD_COLOR_BLACK);
-                            arm_lcd_printf("km/h");
-                        }
+                        arm_lcd_text_set_font((const arm_2d_font_t *)&ARM_2D_FONT_6x8);
+                        arm_lcd_text_set_draw_region(&__item_region);
+                        arm_lcd_text_set_colour( GLCD_COLOR_DARK_GREY, GLCD_COLOR_BLACK);
+                    #if ARM_2D_SCENE_METER_SHOW_FPS
+                        arm_lcd_printf_label(ARM_2D_ALIGN_BOTTOM_CENTRE, "FPS");
+                    #else
+                        arm_lcd_printf_label(ARM_2D_ALIGN_BOTTOM_CENTRE, "km/s");
+                    #endif
                     }
 
                     arm_lcd_text_set_target_framebuffer(NULL);
@@ -355,7 +371,9 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_meter_handler)
         arm_lcd_text_set_draw_region(NULL);
         arm_lcd_text_set_colour(GLCD_COLOR_RED, GLCD_COLOR_WHITE);
         arm_lcd_text_location(0,0);
-    #if ARM_2D_SCENE_METER_USE_JPG
+    #if ARM_2D_SCENE_METER_USE_QOI
+        arm_lcd_puts("Scene meter with QOI");
+    #elif ARM_2D_SCENE_METER_USE_JPG
     #   if ARM_2D_SCENE_METER_USE_ZJPGD
         arm_lcd_puts("Scene meter with ZJPGD");
     #   else
@@ -489,7 +507,89 @@ user_scene_meter_t *__arm_2d_scene_meter_init(   arm_2d_scene_player_t *ptDispAd
     } while(0);
 
     /* initialize TJpgDec loader */
-#if ARM_2D_SCENE_METER_USE_JPG
+#if ARM_2D_SCENE_METER_USE_QOI
+do {
+    #if ARM_2D_DEMO_QOI_USE_FILE
+        arm_qoi_io_file_loader_init(&this.LoaderIO.tFile, "../common/asset/radar_background.qoi");
+    #else
+        extern const uint8_t c_qoiMeterPanel[20394];
+
+        arm_qoi_io_binary_loader_init(&this.LoaderIO.tBinary, c_qoiMeterPanel, sizeof(c_qoiMeterPanel));
+    #endif
+        arm_qoi_loader_cfg_t tCFG = {
+            //.bUseHeapForVRES = true,
+            .ptScene = (arm_2d_scene_t *)ptThis,
+            .u2WorkMode = ARM_QOI_MODE_PARTIAL_DECODED,
+
+            /* you can only extract specific colour channel and use it as A8 mask */
+            //.tColourInfo.chScheme = ARM_2D_COLOUR_MASK_A8,
+            //.u2ChannelIndex = ARM_QOI_MASK_CHN_GREEN,   
+
+            //.bInvertColour = true,
+            //.bForceDisablePreBlendwithBG = true,
+            //.tBackgroundColour.wColour = GLCD_COLOR_WHITE,
+        #if ARM_2D_DEMO_QOI_USE_FILE
+            .ImageIO = {
+                .ptIO = &ARM_QOI_IO_FILE_LOADER,
+                .pTarget = (uintptr_t)&this.LoaderIO.tFile,
+            },
+        #else
+            .ImageIO = {
+                .ptIO = &ARM_QOI_IO_BINARY_LOADER,
+                .pTarget = (uintptr_t)&this.LoaderIO.tBinary,
+            },
+        #endif
+        };
+
+        arm_qoi_loader_init(&this.tQOIBackground, &tCFG);
+
+#if 1
+        /* add reference point */
+    #define REFERENCE_POINT_NUMBER      5
+        arm_2d_location_t tReferencePoint;
+
+        arm_2d_align_centre(tScreen, this.tQOIBackground.vres.tTile.tRegion.tSize) {
+            arm_2d_location_t tBackgroundLocation = __centre_region.tLocation;
+
+            arm_2d_align_centre(tScreen, 240, 240) {
+
+                tReferencePoint = __centre_region.tLocation;
+
+                int16_t nDelta = __centre_region.tSize.iHeight / REFERENCE_POINT_NUMBER;
+                for (int n = 1; n < REFERENCE_POINT_NUMBER; n++) {
+
+                    tReferencePoint.iY = __centre_region.tLocation.iY + n * nDelta;
+
+                    arm_qoi_loader_add_reference_point( &this.tQOIBackground, 
+                                                          tBackgroundLocation,
+                                                          tReferencePoint);
+                }
+            }
+
+
+        /* add reference point for navigation layer */
+        #if __DISP0_CFG_NAVIGATION_LAYER_MODE__ == 2
+    
+            arm_2d_align_bottom_centre(tScreen, 100, 24) {
+                tReferencePoint = __bottom_centre_region.tLocation;
+                tReferencePoint.iY -= 16;
+            }
+
+        #else
+            tReferencePoint.iX = 0;
+            tReferencePoint.iY = ((tScreen.tSize.iHeight + 7) / 8 - 2) * 8;
+        #endif
+
+        #if __DISP0_CFG_NAVIGATION_LAYER_MODE__ != 0            
+            arm_qoi_loader_add_reference_point( &this.tQOIBackground, 
+                                                tBackgroundLocation,
+                                                tReferencePoint);
+        #endif
+        }
+#endif
+
+    } while(0);
+#elif ARM_2D_SCENE_METER_USE_JPG
 #   if ARM_2D_SCENE_METER_USE_ZJPGD
     do {
     #if ARM_2D_DEMO_ZJPGD_USE_FILE

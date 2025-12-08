@@ -33,11 +33,16 @@ extern "C" {
 
 #define ARM_2D_DEMO_USE_ZJPGD               1
 
+#define ARM_2D_SCENE_HISTOGRAM_USE_QOI      1
 #define ARM_2D_SCENE_HISTOGRAM_USE_JPG      1
 #define ARM_2D_SCENE_HISTOGRAM_USE_ZJPGD    0
 
 #define ARM_2D_SCENE_METER_USE_JPG          1
 #define ARM_2D_SCENE_METER_USE_ZJPGD        1
+#define ARM_2D_SCENE_METER_USE_QOI          1
+#define ARM_2D_SCENE_METER_SHOW_FPS         1
+
+
 
 
 /*============================ MACROFIED FUNCTIONS ===========================*/

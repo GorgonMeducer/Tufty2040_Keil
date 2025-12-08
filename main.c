@@ -43,6 +43,32 @@ void scene_rickrolling_loader(void)
     arm_2d_scene_rickrolling_init(&DISP0_ADAPTER);
 }
 
+void scene_tjpgd_loader(void) 
+{
+    arm_2d_scene_tjpgd_init(&DISP0_ADAPTER);
+}
+
+void scene_qoi_loader(void) 
+{
+    arm_2d_scene_qoi_init(&DISP0_ADAPTER);
+}
+
+void scene_radars_loader(void) 
+{
+    arm_2d_scene_radars_init(&DISP0_ADAPTER);
+}
+
+void scene_blink_loader(void) 
+{
+    arm_2d_scene_blink_init(&DISP0_ADAPTER);
+}
+
+
+void scene_flight_attitude_instrument_loader(void) 
+{
+    arm_2d_scene_flight_attitude_instrument_init(&DISP0_ADAPTER);
+}
+
 void scene_panel_loader(void) 
 {
     arm_2d_scene_panel_init(&DISP0_ADAPTER);
@@ -97,19 +123,28 @@ typedef struct demo_scene_t {
 
 static demo_scene_t const c_SceneLoaders[] = {
 
-#if 0
+#if 1
     {
-        5000,
-        scene_qrcode_loader,
+        43000,
+        scene_radars_loader,
     },
     {
         20000,
-        scene_music_player_loader,
+        scene_blink_loader,
+    },
+    {
+        20000,
+        scene_space_badge_loader,
     },
 #else
     {
         .fnLoader = 
-        scene_panel_loader,
+        //scene_meter_loader,
+        //scene_histogram_loader,
+        //scene_blink_loader,
+        //scene_histogram_loader,
+        //scene_flight_attitude_instrument_loader,
+        scene_radars_loader,
         //scene_music_player_loader,
         //scene_meter_loader,
         //scene_histogram_loader,
@@ -198,7 +233,7 @@ int main(void)
 
     while (true) {
 
-        disp_adapter0_task();
+        disp_adapter0_task(60);
 
         if (!s_tDemoCTRL.bIsTimeout) {
 

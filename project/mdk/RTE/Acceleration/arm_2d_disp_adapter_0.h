@@ -207,7 +207,7 @@ extern "C" {
 // <q> Enable Dirty Region Optimization Service
 // <i> Optimize dirty regions to avoid fresh overlapped areas
 #ifndef __DISP0_CFG_OPTIMIZE_DIRTY_REGIONS__
-#   define __DISP0_CFG_OPTIMIZE_DIRTY_REGIONS__                    0
+#   define __DISP0_CFG_OPTIMIZE_DIRTY_REGIONS__                    1
 #endif
 
 // <o> Dirty Region Pool Size <4-255>
