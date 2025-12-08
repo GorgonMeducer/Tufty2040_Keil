@@ -156,6 +156,12 @@ void cs_deselect(void)
     while(!pio_sm_is_tx_fifo_empty(ST7789_PIO, s_sm)) { 
         tight_loop_contents();
     };
+    /* wait extra 4 + 1 cycles for the final data */
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
+    __NOP();
     pio_sm_set_enabled(s_pio, s_sm, false);
 
     if (ST7789_PIN_CS >= 0) {
@@ -204,9 +210,11 @@ static
 void st7789_pio_stream_dma_irq(void)
 {
     if (dma_channel_get_irq0_status(dma_chan)) {
+        
         dma_channel_acknowledge_irq0(dma_chan);
         dma_channel_set_irq0_enabled(dma_chan, false);
         cs_deselect();
+        
 
         st7789_insert_async_flush_cpl_evt_handler();
     }
