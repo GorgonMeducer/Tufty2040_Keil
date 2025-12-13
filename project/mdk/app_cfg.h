@@ -42,6 +42,8 @@ extern "C" {
 #define ARM_2D_SCENE_METER_USE_QOI          1
 #define ARM_2D_SCENE_METER_SHOW_FPS         1
 
+#define ARM_2D_DEMO_RADAR_USE_QOI           0
+
 
 
 
