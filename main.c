@@ -125,7 +125,7 @@ static demo_scene_t const c_SceneLoaders[] = {
 
 #if 1
     {
-        43000,
+        20000,
         scene_radars_loader,
     },
     {
