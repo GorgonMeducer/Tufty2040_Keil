@@ -248,6 +248,18 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_rickrolling_handler)
                     &__centre_region);
                                     
         }
+
+        /* draw text at the top-left corner */
+        arm_lcd_text_set_target_framebuffer((arm_2d_tile_t *)ptTile);
+        arm_lcd_text_set_font(&ARM_2D_FONT_6x8.use_as__arm_2d_font_t);
+        arm_lcd_text_set_draw_region(NULL);
+        arm_lcd_text_set_colour(GLCD_COLOR_RED, GLCD_COLOR_WHITE);
+        arm_lcd_text_location(0,0);
+    #if ARM_2D_DEMO_USE_ZJPGD
+        arm_lcd_puts("Scene Rickrolling with ZJpgD");
+    #else
+        arm_lcd_puts("Scene Rickrolling with TJpgDec");
+    #endif
     /*-----------------------draw the foreground end  -----------------------*/
     }
     ARM_2D_OP_WAIT_ASYNC();
@@ -313,11 +325,11 @@ user_scene_rickrolling_t *__arm_2d_scene_rickrolling_init(   arm_2d_scene_player
     /* initialize Zjpgdec loader */
     do {
     #if ARM_2D_DEMO_JPGD_USE_FILE
-        arm_zjpgd_io_file_loader_init(&this.LoaderIO.tFile, "Rickrolling75.jpg");
+        arm_loader_io_file_init(&this.LoaderIO.tFile, "../common/asset/Rickrolling75.jpg");
     #else
         extern const uint8_t c_chRickRolling75[104704];
 
-        arm_zjpgd_io_binary_loader_init(&this.LoaderIO.tBinary, c_chRickRolling75, sizeof(c_chRickRolling75));
+        arm_loader_io_binary_init(&this.LoaderIO.tBinary, c_chRickRolling75, sizeof(c_chRickRolling75));
     #endif
 
         arm_zjpgd_loader_cfg_t tCFG = {
@@ -329,12 +341,12 @@ user_scene_rickrolling_t *__arm_2d_scene_rickrolling_init(   arm_2d_scene_player
         
         #if ARM_2D_DEMO_JPGD_USE_FILE
             .ImageIO = {
-                .ptIO = &ARM_ZJPGD_IO_FILE_LOADER,
+                .ptIO = &ARM_LOADER_IO_FILE,
                 .pTarget = (uintptr_t)&this.LoaderIO.tFile,
             },
         #else
             .ImageIO = {
-                .ptIO = &ARM_ZJPGD_IO_BINARY_LOADER,
+                .ptIO = &ARM_LOADER_IO_BINARY,
                 .pTarget = (uintptr_t)&this.LoaderIO.tBinary,
             },
         #endif
@@ -347,11 +359,11 @@ user_scene_rickrolling_t *__arm_2d_scene_rickrolling_init(   arm_2d_scene_player
     /* initialize TJpgDec loader */
     do {
     #if ARM_2D_DEMO_JPGD_USE_FILE
-        arm_tjpgd_io_file_loader_init(&this.LoaderIO.tFile, "Rickrolling75.jpg");
+        arm_loader_io_file_init(&this.LoaderIO.tFile, "../common/asset/Rickrolling75.jpg");
     #else
         extern const uint8_t c_chRickRolling75[104704];
 
-        arm_tjpgd_io_binary_loader_init(&this.LoaderIO.tBinary, c_chRickRolling75, sizeof(c_chRickRolling75));
+        arm_loader_io_binary_init(&this.LoaderIO.tBinary, c_chRickRolling75, sizeof(c_chRickRolling75));
     #endif
 
         arm_tjpgd_loader_cfg_t tCFG = {
@@ -361,12 +373,12 @@ user_scene_rickrolling_t *__arm_2d_scene_rickrolling_init(   arm_2d_scene_player
         
         #if ARM_2D_DEMO_JPGD_USE_FILE
             .ImageIO = {
-                .ptIO = &ARM_TJPGD_IO_FILE_LOADER,
+                .ptIO = &ARM_LOADER_IO_FILE,
                 .pTarget = (uintptr_t)&this.LoaderIO.tFile,
             },
         #else
             .ImageIO = {
-                .ptIO = &ARM_TJPGD_IO_BINARY_LOADER,
+                .ptIO = &ARM_LOADER_IO_BINARY,
                 .pTarget = (uintptr_t)&this.LoaderIO.tBinary,
             },
         #endif

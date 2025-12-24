@@ -115,6 +115,11 @@ void scene_matrix_loader(void)
     arm_2d_scene_matrix_init(&DISP0_ADAPTER);
 }
 
+void scene_ring_indicator_loader(void) 
+{
+    arm_2d_scene_ring_indicator_init(&DISP0_ADAPTER);
+}
+
 
 typedef struct demo_scene_t {
     int32_t nLastInMS;
@@ -139,13 +144,14 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
+        scene_ring_indicator_loader,
         //scene_meter_loader,
         //scene_histogram_loader,
         //scene_blink_loader,
         //scene_histogram_loader,
         //scene_flight_attitude_instrument_loader,
         //scene_radars_loader,
-        scene_music_player_loader,
+        //scene_music_player_loader,
         //scene_meter_loader,
         //scene_histogram_loader,
         //scene_rickrolling_loader,
