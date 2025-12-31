@@ -140,10 +140,10 @@ static
 const arm_2d_tile_t c_tChildImage = 
     impl_child_tile(
         s_tBigImage.tTile,
-        160,
-        128,
-        160,
-        128
+        100,
+        100,
+        220,
+        156
     );
 
 /* NOTE: arm_2d_vres_t object should always be placed in RAM */

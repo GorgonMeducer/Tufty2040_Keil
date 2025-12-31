@@ -63,6 +63,10 @@ void scene_blink_loader(void)
     arm_2d_scene_blink_init(&DISP0_ADAPTER);
 }
 
+void scene_mask_generator_loader(void) 
+{
+    arm_2d_scene_mask_generation_init(&DISP0_ADAPTER);
+}
 
 void scene_flight_attitude_instrument_loader(void) 
 {
@@ -120,6 +124,16 @@ void scene_ring_indicator_loader(void)
     arm_2d_scene_ring_indicator_init(&DISP0_ADAPTER);
 }
 
+void scene_waveform_loader(void) 
+{
+    arm_2d_scene_waveform_init(&DISP0_ADAPTER);
+}
+
+void scene_virtual_resource_loader(void) 
+{
+    arm_2d_scene_virtual_resource_init(&DISP0_ADAPTER);
+}
+
 
 typedef struct demo_scene_t {
     int32_t nLastInMS;
@@ -144,7 +158,9 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_ring_indicator_loader,
+        scene_waveform_loader,
+        //scene_mask_generator_loader,
+        //scene_ring_indicator_loader,
         //scene_meter_loader,
         //scene_histogram_loader,
         //scene_blink_loader,
