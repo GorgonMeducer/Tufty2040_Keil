@@ -126,7 +126,16 @@ static void __on_scene_waveform_load(arm_2d_scene_t *ptScene)
     user_scene_waveform_t *ptThis = (user_scene_waveform_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
 
-    waveform_view_on_load(&this.tWaveform);
+    waveform_view_on_load(&this.Waveform.tHelper);
+
+    /* disable dynamic dirty region optimization for Cortex-M0/M0+ */
+    #if (defined(__ARM_ARCH) && __ARM_ARCH_PROFILE == 'M' && (__ARM_ARCH_ISA_THUMB < 2))
+
+    this.bIsDirtyRegionOptimizationEnabled = !!
+            arm_2d_helper_pfb_disable_dirty_region_optimization(
+                &this.use_as__arm_2d_scene_t.ptPlayer->use_as__arm_2d_helper_pfb_t);
+
+    #endif
 
 }
 
@@ -143,7 +152,7 @@ static void __on_scene_waveform_depose(arm_2d_scene_t *ptScene)
     ARM_2D_UNUSED(ptThis);
 
     /*--------------------- insert your depose code begin --------------------*/
-    waveform_view_depose(&this.tWaveform);
+    waveform_view_depose(&this.Waveform.tHelper);
 
     /*---------------------- insert your depose code end  --------------------*/
 
@@ -189,9 +198,34 @@ void arm_2d_scene_waveform_enqueue( user_scene_waveform_t *ptThis,
         return ;
     }
 
-    arm_loader_io_window_enqueue(   &this.tWindow, 
+    arm_loader_io_window_enqueue(   &this.Waveform.tWindowIO, 
                                     piSamples, 
                                     hwSampleCount * 2);
+}
+
+static void __generate_cos_samples( user_scene_waveform_t *ptThis, 
+                                    size_t tCount,
+                                    float fStep)
+{
+    assert(NULL != ptThis);
+
+    if (0 == tCount) {
+        return ;
+    }
+    do {
+        this.fDegree += fStep;
+        int16_t iData = 900 * arm_cos_f32(ARM_2D_ANGLE(this.fDegree));
+
+        /* add random noise */
+        //srand(arm_2d_helper_get_system_timestamp());
+        //iData += (rand() & 0x0FF) - 0x07F;
+
+        arm_2d_scene_waveform_enqueue(  ptThis,
+                                        &iData,
+                                        1);
+    } while(--tCount);
+
+    this.fDegree = ARM_2D_FMODF(this.fDegree, 360.0f);
 }
 
 static void __on_scene_waveform_frame_start(arm_2d_scene_t *ptScene)
@@ -205,20 +239,14 @@ static void __on_scene_waveform_frame_start(arm_2d_scene_t *ptScene)
             /* simulate a full battery charging/discharge cycle */
         arm_2d_helper_time_cos_slider(50, 350, 20000, 0, &nResult, &this.lTimestamp[0]);
 
-        this.fDegree += (float)nResult / 100.0f;
-        int16_t iData = 900 * arm_cos_f32(ARM_2D_ANGLE(this.fDegree));
-
-        /* add random noise */
-        //srand(arm_2d_helper_get_system_timestamp());
-        //iData += (rand() & 0x0FF) - 0x07F;
-
-        arm_2d_scene_waveform_enqueue(  ptThis,
-                                        &iData,
-                                        1);
+        __generate_cos_samples(ptThis, 2, (float)nResult / 100.0f);
+        
     } while(0);
 
-    arm_loader_io_window_on_frame_start(&this.tWindow);
-    waveform_view_on_frame_start(&this.tWaveform);
+    /* NOTE: Please only set true to indicate the diagram data is updated (changed).
+     *       Since we change the data for each frame, we pass true here directly.
+     */
+    waveform_view_on_frame_start(&this.Waveform.tHelper, true);      
 
 }
 
@@ -227,7 +255,7 @@ static void __on_scene_waveform_frame_complete(arm_2d_scene_t *ptScene)
     user_scene_waveform_t *ptThis = (user_scene_waveform_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
 
-    waveform_view_on_frame_complete(&this.tWaveform);
+    waveform_view_on_frame_complete(&this.Waveform.tHelper);
 
 }
 
@@ -236,6 +264,12 @@ static void __before_scene_waveform_switching_out(arm_2d_scene_t *ptScene)
     user_scene_waveform_t *ptThis = (user_scene_waveform_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
 
+    if (this.bIsDirtyRegionOptimizationEnabled) {
+        arm_2d_helper_pfb_enable_dirty_region_optimization(
+                &this.use_as__arm_2d_scene_t.ptPlayer->use_as__arm_2d_helper_pfb_t,
+                NULL,
+                0);
+    }
 }
 
 static
@@ -268,19 +302,20 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_waveform_handler)
                 arm_2d_layout(__dock_region, BOTTOM_UP) {
 
                     /* waveform */
-                    __item_line_dock_vertical(this.tWaveform.tTile.tRegion.tSize.iHeight + 20) {
+                    __item_line_dock_vertical(this.Waveform.tHelper.tTile.tRegion.tSize.iHeight + 20) {
 
                         draw_round_corner_box(  ptTile, 
                                                 &__item_region, 
                                                 GLCD_COLOR_DARK_GREY, 
                                                 32);
 
-                        arm_2d_align_centre(__item_region, this.tWaveform.tTile.tRegion.tSize) {
+                        arm_2d_align_centre(__item_region, this.Waveform.tHelper.tTile.tRegion.tSize) {
 
-                            /* draw waveform as a normal tile */
-                            arm_2d_tile_copy(   &this.tWaveform.tTile, 
+                            waveform_view_show( &this.Waveform.tHelper, 
                                                 ptTile, 
-                                                &__centre_region);
+                                                &__centre_region,
+                                                bIsNewFrame);
+
                         }
                     }
 
@@ -379,7 +414,7 @@ user_scene_waveform_t *__arm_2d_scene_waveform_init(   arm_2d_scene_player_t *pt
             .fnOnFrameCPL   = &__on_scene_waveform_frame_complete,
             .fnDepose       = &__on_scene_waveform_depose,
 
-            .bUseDirtyRegionHelper = false,
+            .bUseDirtyRegionHelper = true,
         },
         .bUserAllocated = bUserAllocated,
     };
@@ -401,7 +436,7 @@ user_scene_waveform_t *__arm_2d_scene_waveform_init(   arm_2d_scene_player_t *pt
             return NULL;
         }
         
-        arm_loader_io_window_init(  &this.tWindow, 
+        arm_loader_io_window_init(  &this.Waveform.tWindowIO, 
                                     this.pchBuffer, 
                                     tBufferSize,
                                     ARM_2D_DEMO_WAVE_FORM_WINDOW_SIZE * sizeof(uint16_t));
@@ -415,7 +450,7 @@ user_scene_waveform_t *__arm_2d_scene_waveform_init(   arm_2d_scene_player_t *pt
 
             .IO = {
                 .ptIO = &ARM_LOADER_IO_WINDOW,
-                .pTarget = (uintptr_t)&this.tWindow,
+                .pTarget = (uintptr_t)&this.Waveform.tWindowIO,
             },
 
             .ChartScale = {
@@ -426,15 +461,17 @@ user_scene_waveform_t *__arm_2d_scene_waveform_init(   arm_2d_scene_player_t *pt
             .u2SampleSize = WAVEFORM_SAMPLE_SIZE_HWORD,
             .u5DotHeight = 2,
             .bUnsigned = false,
-            
 
             .tBrushColour.tColour = GLCD_COLOR_NIXIE_TUBE,
             .tBackgroundColour.tColour = this.use_as__arm_2d_scene_t.tCanvas.wColour,
 
+            .chDirtyRegionItemCount = dimof(this.Waveform.tDirtyBins),
+            .ptDirtyBins = this.Waveform.tDirtyBins,
+            .bUseDirtyRegion = true,
             .ptScene = &this.use_as__arm_2d_scene_t,
         };
 
-        waveform_view_init(&this.tWaveform, &tCFG);
+        waveform_view_init(&this.Waveform.tHelper, &tCFG);
     } while(0);
 
 #if 0
