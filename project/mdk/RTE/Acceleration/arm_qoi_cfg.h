@@ -1,11 +1,11 @@
 /*----------------------------------------------*/
-/* Qoi Decoder System Configurations 0.5.0      */
+/* Qoi Decoder System Configurations 1.0.0      */
 /*----------------------------------------------*/
 
 #ifndef __ARM_2D_QOI_CFG_H__
 #define __ARM_2D_QOI_CFG_H__
 
-#include "arm_2d_cfg.h"
+#include "arm_2d.h"
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 //
@@ -16,7 +16,7 @@
 // <i> The size of the IO buffer
 // <i> Default: 64
 #ifndef ARM_QOI_IO_BUFF_SIZE
-#   define ARM_QOI_IO_BUFF_SIZE         128
+#   define ARM_QOI_IO_BUFF_SIZE         64
 #endif
 
 //</h>

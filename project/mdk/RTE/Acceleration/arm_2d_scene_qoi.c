@@ -147,10 +147,11 @@ static void __on_scene_qoi_frame_start(arm_2d_scene_t *ptScene)
     user_scene_qoi_t *ptThis = (user_scene_qoi_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
 
-    this.iNumber = MIN(( arm_2d_helper_get_reference_clock_frequency() 
-                            / ptScene->ptPlayer->Benchmark.wAverage), 
-                            999);
-
+    if (0 != ptScene->ptPlayer->Benchmark.wAverage) {
+        this.iNumber = MIN(( arm_2d_helper_get_reference_clock_frequency() 
+                           / ptScene->ptPlayer->Benchmark.wAverage), 
+                          999);
+    }
 
     arm_qoi_loader_on_frame_start(&this.tQOIBackground);
 
@@ -214,7 +215,6 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_qoi_handler)
                     break;
             }
         }
-
         /* draw 3 digits numbers */
         do {
             /* 3 digits */
@@ -247,7 +247,7 @@ IMPL_PFB_ON_DRAW(__pfb_draw_scene_qoi_handler)
                     arm_lcd_text_set_target_framebuffer(NULL);
                 }
             }
-        
+            
         } while(0);
 
         /* draw text at the top-left corner */
@@ -317,7 +317,7 @@ user_scene_qoi_t *__arm_2d_scene_qoi_init(   arm_2d_scene_player_t *ptDispAdapte
 
     /* ------------   initialize members of user_scene_qoi_t begin ---------------*/
 
-    /* initialize Qoiec loader */
+    /* initialize QOI loader */
     do {
     #if ARM_2D_DEMO_QOI_USE_FILE
         arm_qoi_io_file_loader_init(&this.LoaderIO.tFile, "../common/asset/radar_background.qoi");
@@ -328,7 +328,7 @@ user_scene_qoi_t *__arm_2d_scene_qoi_init(   arm_2d_scene_player_t *ptDispAdapte
         arm_qoi_io_binary_loader_init(&this.LoaderIO.tBinary, c_qoiMeterPanel, sizeof(c_qoiMeterPanel));
     #endif
         arm_qoi_loader_cfg_t tCFG = {
-            .bUseHeapForVRES = true,
+            //.bUseHeapForVRES = true,
             .ptScene = (arm_2d_scene_t *)ptThis,
             .u2WorkMode = ARM_QOI_MODE_PARTIAL_DECODED,
 
