@@ -279,7 +279,7 @@ int main(void)
 #endif
     while (true) {
 
-        disp_adapter0_task();
+        disp_adapter0_task(60);
 
         if (!s_tDemoCTRL.bIsTimeout) {
 
