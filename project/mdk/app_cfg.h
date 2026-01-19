@@ -43,6 +43,7 @@ extern "C" {
 #define ARM_2D_SCENE_METER_SHOW_FPS                 1
 
 #define ARM_2D_DEMO_RADAR_USE_JPG_FOR_ANIMATION     0
+#define ARM_2D_DEMO_RADAR_USE_QOI_FOR_ANIMATION     1
 #define ARM_2D_DEMO_RADAR_SHOW_ANIMATION            1
 #define ARM_2D_DEMO_RADAR_DEBUG                     1
 

@@ -22,7 +22,6 @@
 
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB) && defined(RTE_Acceleration_Arm_2D_Extra_Loader)
 
-
 #include <assert.h>
 #include <string.h>
 
@@ -86,16 +85,13 @@ arm_2d_err_t circle_mask_generator_init(circle_mask_generator_t *ptThis,
     
     memset(ptThis, 0, sizeof(circle_mask_generator_t));
 
-    //if (NULL != ptCFG) {
-        this.tCFG = *ptCFG;
-    //}
-
-
+    this.iRadius = ptCFG->iRadius;
+    this.bAntiAlias = ptCFG->bAntiAlias;
 
     arm_2d_err_t tResult = ARM_2D_ERR_NONE;
     do {
         arm_generic_loader_cfg_t tCFG = {
-            .bUseHeapForVRES = this.tCFG.bUseHeapForVRES,
+            .bUseHeapForVRES = ptCFG->bUseHeapForVRES,
             .tColourInfo.chScheme = ARM_2D_COLOUR_MASK_A8,
 
             .UserDecoder = {
@@ -103,7 +99,7 @@ arm_2d_err_t circle_mask_generator_init(circle_mask_generator_t *ptThis,
                 .fnDecode = &__circle_mask_generator_decode,
             },
 
-            .ptScene = this.tCFG.ptScene,
+            .ptScene = ptCFG->ptScene,
         };
 
         tResult = arm_generic_loader_init(  &this.use_as__arm_generic_loader_t,
@@ -113,7 +109,7 @@ arm_2d_err_t circle_mask_generator_init(circle_mask_generator_t *ptThis,
             break;
         }
 
-        this.tTile.tRegion.tSize = this.tCFG.tBoxSize;
+        this.tTile.tRegion.tSize = ptCFG->tBoxSize;
         if ((0 == this.tTile.tRegion.tSize.iWidth)
          || (0 == this.tTile.tRegion.tSize.iHeight)) {
             tResult = ARM_2D_ERR_INVALID_PARAM;
@@ -121,11 +117,11 @@ arm_2d_err_t circle_mask_generator_init(circle_mask_generator_t *ptThis,
         }
 
         /* update pivot */
-        if (NULL == this.tCFG.ptPivot) {
+        if (NULL == ptCFG->ptPivot) {
             this.tPivot.iX = (this.tTile.tRegion.tSize.iWidth - 1) >> 1;
             this.tPivot.iY = (this.tTile.tRegion.tSize.iHeight - 1) >> 1;
         } else {
-            this.tPivot = *this.tCFG.ptPivot;
+            this.tPivot = *ptCFG->ptPivot;
         }
 
     } while(0);
@@ -172,7 +168,7 @@ arm_2d_err_t circle_mask_generator_set_radius(  circle_mask_generator_t *ptThis,
     assert(NULL != ptThis);
 
     if (iRadius > 0) {
-        this.tCFG.iRadius = iRadius;
+        this.iRadius = iRadius;
     } else {
         return ARM_2D_ERR_INVALID_PARAM;
     }
@@ -184,7 +180,7 @@ ARM_NONNULL(1)
 int16_t circle_mask_generator_get_radius(  circle_mask_generator_t *ptThis)
 {
     assert(NULL != ptThis);
-    return this.tCFG.iRadius;
+    return this.iRadius;
 }
 
 ARM_NONNULL(1)
@@ -194,7 +190,7 @@ arm_2d_err_t __circle_mask_generator_decoder_init(arm_generic_loader_t *ptObj)
     assert(NULL != ptObj);
 
     circle_mask_generator_t *ptThis = (circle_mask_generator_t *)ptObj;
-
+    ARM_2D_UNUSED(ptThis);
 
     return ARM_2D_ERR_NONE;
 }
@@ -207,17 +203,18 @@ arm_2d_err_t __circle_mask_generator_decode(arm_generic_loader_t *ptObj,
                                  uint32_t iTargetStrideInByte,
                                  uint_fast8_t chBitsPerPixel)
 {
+    ARM_2D_UNUSED(chBitsPerPixel);
+
     assert(NULL != ptObj);
     circle_mask_generator_t *ptThis = (circle_mask_generator_t *)ptObj;
 
     int_fast16_t iXLimit = ptROI->tSize.iWidth + ptROI->tLocation.iX; 
     int_fast16_t iYLimit = ptROI->tSize.iHeight + ptROI->tLocation.iY; 
 
-    int16_t iRadius = this.tCFG.iRadius;
+    int16_t iRadius = this.iRadius;
 
     uint32_t wRadius2 = (uint32_t)iRadius * (uint32_t)iRadius;
     uint32_t wRadiusBorder2 = (uint32_t)(iRadius + 1) * (uint32_t)(iRadius + 1);
-    q16_t q16Radius = reinterpret_q16_s16(iRadius);
 
     q16_t q161MagicRatio 
         = reinterpret_q16_s16( 
@@ -229,7 +226,6 @@ arm_2d_err_t __circle_mask_generator_decode(arm_generic_loader_t *ptObj,
         int16_t iYOffset = iY - this.tPivot.iY;
 
         bool bFindFirstInnerPoint = false;
-        bool bDrawInner = false;
         uint16_t hwInnerPoints = 0;
 
         int_fast16_t iX = ptROI->tLocation.iX;
@@ -262,7 +258,6 @@ arm_2d_err_t __circle_mask_generator_decode(arm_generic_loader_t *ptObj,
 
             if (bFindFirstInnerPoint) {
                 /* draw inner points */
-                bDrawInner = true;
                 if (--hwInnerPoints) {
                     *pchTargetLine++ = 0xFF;
                     continue;
@@ -288,7 +283,7 @@ arm_2d_err_t __circle_mask_generator_decode(arm_generic_loader_t *ptObj,
                     /* fill colour with opacity */
                     *pchTargetLine++ = 0xFF;
                     continue;
-                } else if (!this.tCFG.bAntiAlias) {
+                } else if (!this.bAntiAlias) {
                     *pchTargetLine++ = 0x00;
                     continue;
                 }

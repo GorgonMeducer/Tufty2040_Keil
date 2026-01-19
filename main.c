@@ -25,8 +25,13 @@
 #include "arm_2d_scenes.h"
 #include "arm_2d_demos.h"
 
+#ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
+#   include "arm_2d_benchmark.h"
+#endif
+
 #include "arm_2d_scene_histogram.h"
 #include "arm_2d_scene_meter.h"
+#include "arm_2d_scene_bubble_charging.h"
 
 
 /*============================ MACROS ========================================*/
@@ -41,6 +46,11 @@
 void scene_rickrolling_loader(void) 
 {
     arm_2d_scene_rickrolling_init(&DISP0_ADAPTER);
+}
+
+void scene_zhrgb565_loader(void) 
+{
+    arm_2d_scene_zhrgb565_init(&DISP0_ADAPTER);
 }
 
 void scene_tjpgd_loader(void) 
@@ -108,6 +118,15 @@ void scene_music_player_loader(void)
     arm_2d_scene_music_player_init(&DISP0_ADAPTER);
 }
 
+void scene_bubble_charging_loader(void) 
+{
+    arm_2d_scene_bubble_charging_init(&DISP0_ADAPTER);
+}
+
+void scene_gas_gauge_loader(void) 
+{
+    arm_2d_scene_gas_gauge_init(&DISP0_ADAPTER);
+}
 
 void scene_watch_face_01_loader(void) 
 {
@@ -158,7 +177,10 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_waveform_loader,
+        scene_zhrgb565_loader,
+        //scene_bubble_charging_loader,
+        //scene_watch_face_01_loader,
+        //scene_waveform_loader,
         //scene_mask_generator_loader,
         //scene_ring_indicator_loader,
         //scene_meter_loader,
@@ -231,10 +253,6 @@ static void system_init(void)
     arm_2d_init();
     disp_adapter0_init();
 
-    arm_2d_scene_player_register_before_switching_event_handler(
-            &DISP0_ADAPTER,
-            before_scene_switching_handler);
-
 }
 
 
@@ -250,12 +268,18 @@ int main(void)
     printf("\r\nRun Coremark 1.0...\r\n");
     coremark_main();
 #endif
-
+#ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
+    arm_2d_run_benchmark();
+#else
+    arm_2d_scene_player_register_before_switching_event_handler(
+            &DISP0_ADAPTER,
+            before_scene_switching_handler);
+            
     arm_2d_scene_player_switch_to_next_scene(&DISP0_ADAPTER);
-
+#endif
     while (true) {
 
-        disp_adapter0_task(60);
+        disp_adapter0_task();
 
         if (!s_tDemoCTRL.bIsTimeout) {
 
