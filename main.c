@@ -239,13 +239,13 @@ int main(void)
     coremark_main();
 #endif
 
-    /* prepare and change canvas colour */
-    disp_adapter0_nano_prepare()->tCanvas.wColour = GLCD_COLOR_GREEN;
+//    /* prepare and change canvas colour */
+//    disp_adapter0_nano_prepare()->tCanvas.wColour = GLCD_COLOR_GREEN;
 
-    /* draw one frame */
-    disp_adapter_nano_draw_example_blocking_version();
-    
-    perfc_delay_ms(1000);
+//    /* draw one frame */
+//    disp_adapter_nano_draw_example_blocking_version();
+//    
+//    perfc_delay_ms(1000);
 
     /* NOTE: 
      * 1. Please do NOT call disp_adapter0_nano_prepare() for each frame. 
@@ -261,8 +261,11 @@ int main(void)
 
     while (true) {
 
-        //draw_clock();
-        draw_gasgauge();
+        //uintptr_t nLimit = __perfc_port_get_sp() - 2000; 
+        //__stack_usage_max__("Arm-2D Nano", nLimit) {
+            draw_gasgauge();
+            //draw_clock();
+        //}
 
     }
     //return 0;
