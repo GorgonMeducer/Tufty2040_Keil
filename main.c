@@ -261,8 +261,8 @@ int main(void)
 
     while (true) {
 
-        draw_clock();
-        //draw_gasgauge();
+        //draw_clock();
+        draw_gasgauge();
 
     }
     //return 0;
