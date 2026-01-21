@@ -250,6 +250,9 @@ void st7789_pio_stream_init(void)
                                     true);
 
     float div = (float)clock_get_hz(clk_sys) / (62.5e6f);
+    if (div < 1.0f) {
+        div = 1.0f;
+    }
     sm_config_set_clkdiv(&c, div);
 
     pio_sm_init(s_pio, s_sm, offset, &c);
