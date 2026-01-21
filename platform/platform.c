@@ -46,6 +46,7 @@ void Disp0_DrawBitmap(  int16_t x,
 }
 
 #if __DISP0_CFG_ENABLE_ASYNC_FLUSHING__
+__USED
 void __disp_adapter0_request_async_flushing(void *pTarget,
                                             bool bIsNewFrame,
                                             int16_t iX, 

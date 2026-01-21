@@ -190,7 +190,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>5</Optim>
+            <Optim>7</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -394,21 +394,6 @@
               <FileType>5</FileType>
               <FilePath>.\app_cfg.h</FilePath>
             </File>
-            <File>
-              <FileName>arm_2d_scene_histogram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\arm_2d_scene_histogram.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_2d_scene_meter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\arm_2d_scene_meter.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_2d_scene_bubble_charging.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\arm_2d_scene_bubble_charging.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -462,9 +447,6 @@
           <GroupName>::Device</GroupName>
         </Group>
         <Group>
-          <GroupName>::Language Extension</GroupName>
-        </Group>
-        <Group>
           <GroupName>::Utilities</GroupName>
         </Group>
       </Groups>
@@ -481,120 +463,6 @@
       </api>
     </apis>
     <components>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Blink" Cvendor="ARM" Cversion="2.4.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Blink">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Decoding JPG with TJpgDec" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demo-TJpgDec-Loader" ymlID="Acceleration:Arm-2D Demos:Decoding JPG with TJpgDec">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Flight Attitude Instrument">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Gas Gauge" Cvendor="ARM" Cversion="1.2.1" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Gas Gauge">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Loading Lossless image with QOI" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demo-QOI-Loader" ymlID="Acceleration:Arm-2D Demos:Loading Lossless image with QOI">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Mask Generator" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Mask Generator">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Matrix" Cvendor="ARM" Cversion="2.0.1" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Matrix">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Music Player" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Music Player">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Panel" Cvendor="ARM" Cversion="1.3.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Panel">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="QRCode" Cvendor="ARM" Cversion="1.0.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:QRCode">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Radars" Cvendor="ARM" Cversion="3.6.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Radars">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Ring Indicator" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Ring Indicator">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Showing Animation with TJpgDec" Cvendor="ARM" Cversion="2.2.2" condition="Arm-2D-Demo-TJpgDec-Loader" ymlID="Acceleration:Arm-2D Demos:Showing Animation with TJpgDec">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Showing Animation with zhRGB565" Cvendor="ARM" Cversion="1.0.0" condition="Arm-2D-Demo-zhRGB565-Loader" ymlID="Acceleration:Arm-2D Demos:Showing Animation with zhRGB565">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Space Badge">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="User Defined OPCODE" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:User Defined OPCODE">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Virtual Resources" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Virtual Resources">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Watch Face 01" Cvendor="ARM" Cversion="1.2.2" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Watch Face 01">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Waveform" Cvendor="ARM" Cversion="2.1.0" condition="Arm-2D-Demos" ymlID="Acceleration:Arm-2D Demos:Waveform">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
       <component Cclass="Acceleration" Cgroup="Arm-2D Extras" Csub="Controls" Cvendor="ARM" Cversion="2.15.5" condition="Arm-2D-Controls" ymlID="Acceleration:Arm-2D Extras:Controls">
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
@@ -613,7 +481,7 @@
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D Helper" Csub="Display Adapter" Cvendor="ARM" Cversion="4.1.0" condition="Arm-2D-Displayer-Adapter" maxInstances="8" ymlID="Acceleration:Arm-2D Helper:Display Adapter">
+      <component Cclass="Acceleration" Cgroup="Arm-2D Helper" Csub="Display Adapter" Cvendor="ARM" Cversion="4.3.0" condition="Arm-2D-Displayer-Adapter" maxInstances="8">
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
@@ -638,12 +506,6 @@
         </targetInfos>
       </component>
       <component Cclass="Acceleration" Cgroup="Arm-2D" Csub="Filter" Cvendor="ARM" Cversion="1.2.5" condition="Arm-2D-CORE" ymlID="Acceleration:Arm-2D:Filter">
-        <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Acceleration" Cgroup="Arm-2D" Csub="Transform" Cvendor="ARM" Cversion="1.2.5" condition="Arm-2D-CORE" ymlID="Acceleration:Arm-2D:Transform">
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
@@ -679,12 +541,6 @@
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </component>
-      <component Cclass="Language Extension" Cgroup="Coroutine" Cvendor="GorgonMeducer" Cversion="1.0.0" condition="perf_counter" ymlID="Language Extension:Coroutine">
-        <package name="perf_counter" schemaVersion="1.7.37" url="https://raw.githubusercontent.com/GorgonMeducer/perf_counter/CMSIS-Pack/cmsis-pack/" vendor="GorgonMeducer" version="9.9.9"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
-      </component>
       <component Cclass="Utilities" Cgroup="perf_counter" Csub="Core" Cvariant="Source" Cvendor="GorgonMeducer" Cversion="2.5.5-dev" condition="CMSIS-CORE" ymlID="Utilities:perf_counter:Core&amp;Source">
         <package name="perf_counter" schemaVersion="1.7.37" url="https://raw.githubusercontent.com/GorgonMeducer/perf_counter/CMSIS-Pack/cmsis-pack/" vendor="GorgonMeducer" version="9.9.9"/>
         <targetInfos>
@@ -712,12 +568,10 @@
     </components>
     <files>
       <file attr="config" category="sourceC" name="examples\demos\Battleship.c" version="2.2.0">
-        <instance index="0">RTE\Acceleration\Battleship.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\Battleship.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="User Defined OPCODE" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\common\asset\DigitsFont.c" version="1.2.0">
         <instance index="0" removed="1">RTE\Acceleration\DigitsFont.c</instance>
@@ -726,12 +580,10 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\Eyeball.c" version="2.1.0">
-        <instance index="0">RTE\Acceleration\Eyeball.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\Eyeball.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Blink" Cvendor="ARM" Cversion="2.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\common\controls\GLCD_Fonts.c" version="1.0.0">
         <instance index="0" removed="1">RTE\Acceleration\GLCD_Fonts.c</instance>
@@ -740,12 +592,10 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\LeftEye.c" version="2.4.0">
-        <instance index="0">RTE\Acceleration\LeftEye.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\LeftEye.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Blink" Cvendor="ARM" Cversion="2.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="other" name="tools\README.md" version="1.2.2">
         <instance index="0" removed="1">RTE\Acceleration\README.md</instance>
@@ -778,12 +628,10 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\album_cover.c" version="3.0.0">
-        <instance index="0">RTE\Acceleration\album_cover.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\album_cover.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Music Player" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="Library\Source\arm_2d.c" version="1.5.0">
         <instance index="0">RTE\Acceleration\arm_2d.c</instance>
@@ -801,17 +649,17 @@
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </file>
-      <file attr="config" category="sourceC" name="Helper\template\arm_2d_disp_adapter.c" version="4.1.0">
+      <file attr="config" category="sourceC" name="Helper\template\arm_2d_disp_adapter.c" version="4.3.0">
         <instance index="0">RTE\Acceleration\arm_2d_disp_adapter_0.c</instance>
-        <component Cclass="Acceleration" Cgroup="Arm-2D Helper" Csub="Display Adapter" Cvendor="ARM" Cversion="4.1.0" condition="Arm-2D-Displayer-Adapter" maxInstances="8"/>
+        <component Cclass="Acceleration" Cgroup="Arm-2D Helper" Csub="Display Adapter" Cvendor="ARM" Cversion="4.3.0" condition="Arm-2D-Displayer-Adapter" maxInstances="8"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
         </targetInfos>
       </file>
-      <file attr="config" category="header" name="Helper\template\arm_2d_disp_adapter.h" version="4.1.0">
+      <file attr="config" category="header" name="Helper\template\arm_2d_disp_adapter.h" version="4.3.0">
         <instance index="0">RTE\Acceleration\arm_2d_disp_adapter_0.h</instance>
-        <component Cclass="Acceleration" Cgroup="Arm-2D Helper" Csub="Display Adapter" Cvendor="ARM" Cversion="4.1.0" condition="Arm-2D-Displayer-Adapter" maxInstances="8"/>
+        <component Cclass="Acceleration" Cgroup="Arm-2D Helper" Csub="Display Adapter" Cvendor="ARM" Cversion="4.3.0" condition="Arm-2D-Displayer-Adapter" maxInstances="8"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
         <targetInfos>
           <targetInfo name="AC6-flash"/>
@@ -830,20 +678,16 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_blink.c" version="2.4.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_blink.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_blink.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Blink" Cvendor="ARM" Cversion="2.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_blink.h" version="2.4.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_blink.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_blink.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Blink" Cvendor="ARM" Cversion="2.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_compass.c" version="1.2.2">
         <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_compass.c</instance>
@@ -858,68 +702,52 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_flight_attitude_instrument.c" version="1.4.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_flight_attitude_instrument.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_flight_attitude_instrument.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_flight_attitude_instrument.h" version="1.4.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_flight_attitude_instrument.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_flight_attitude_instrument.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_gas_gauge.c" version="1.2.1">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_gas_gauge.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_gas_gauge.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Gas Gauge" Cvendor="ARM" Cversion="1.2.1" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_gas_gauge.h" version="1.2.1">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_gas_gauge.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_gas_gauge.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Gas Gauge" Cvendor="ARM" Cversion="1.2.1" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\mask_generation\arm_2d_scene_mask_generation.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_mask_generation.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_mask_generation.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Mask Generator" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\mask_generation\arm_2d_scene_mask_generation.h" version="1.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_mask_generation.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_mask_generation.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Mask Generator" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_matrix.c" version="2.0.1">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_matrix.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_matrix.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Matrix" Cvendor="ARM" Cversion="2.0.1" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_matrix.h" version="2.0.1">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_matrix.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_matrix.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Matrix" Cvendor="ARM" Cversion="2.0.1" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\monochrome\arm_2d_scene_mono_clock.c" version="1.0.3">
         <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_mono_clock.c</instance>
@@ -994,36 +822,28 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_music_player.c" version="3.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_music_player.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_music_player.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Music Player" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_music_player.h" version="3.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_music_player.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_music_player.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Music Player" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_panel.c" version="1.3.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_panel.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_panel.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Panel" Cvendor="ARM" Cversion="1.3.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_panel.h" version="1.3.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_panel.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_panel.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Panel" Cvendor="ARM" Cversion="1.3.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_progress_status.c" version="2.2.1">
         <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_progress_status.c</instance>
@@ -1038,100 +858,76 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_qoi.c" version="1.2.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_qoi.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_qoi.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Loading Lossless image with QOI" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demo-QOI-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_qoi.h" version="1.2.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_qoi.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_qoi.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Loading Lossless image with QOI" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demo-QOI-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_qrcode.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_qrcode.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_qrcode.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="QRCode" Cvendor="ARM" Cversion="1.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_qrcode.h" version="1.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_qrcode.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_qrcode.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="QRCode" Cvendor="ARM" Cversion="1.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_radars.c" version="3.6.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_radars.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_radars.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Radars" Cvendor="ARM" Cversion="3.6.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_radars.h" version="3.6.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_radars.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_radars.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Radars" Cvendor="ARM" Cversion="3.6.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_rickrolling.c" version="2.2.2">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_rickrolling.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_rickrolling.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Showing Animation with TJpgDec" Cvendor="ARM" Cversion="2.2.2" condition="Arm-2D-Demo-TJpgDec-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_rickrolling.h" version="2.2.2">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_rickrolling.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_rickrolling.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Showing Animation with TJpgDec" Cvendor="ARM" Cversion="2.2.2" condition="Arm-2D-Demo-TJpgDec-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_ring_indicator.c" version="1.1.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_ring_indicator.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_ring_indicator.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Ring Indicator" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_ring_indicator.h" version="1.1.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_ring_indicator.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_ring_indicator.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Ring Indicator" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_space_badge.c" version="2.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_space_badge.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_space_badge.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_space_badge.h" version="2.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_space_badge.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_space_badge.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_text_reader.c" version="2.0.0">
         <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_text_reader.c</instance>
@@ -1146,100 +942,76 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_tjpgd.c" version="1.1.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_tjpgd.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_tjpgd.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Decoding JPG with TJpgDec" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demo-TJpgDec-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_tjpgd.h" version="1.1.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_tjpgd.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_tjpgd.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Decoding JPG with TJpgDec" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demo-TJpgDec-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_user_defined_opcode.c" version="3.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_user_defined_opcode.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_user_defined_opcode.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="User Defined OPCODE" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_user_defined_opcode.h" version="3.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_user_defined_opcode.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_user_defined_opcode.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="User Defined OPCODE" Cvendor="ARM" Cversion="3.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_virtual_resource.c" version="2.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_virtual_resource.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_virtual_resource.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Virtual Resources" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_virtual_resource.h" version="2.0.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_virtual_resource.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_virtual_resource.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Virtual Resources" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_watch_face_01.c" version="1.2.2">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_watch_face_01.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_watch_face_01.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Watch Face 01" Cvendor="ARM" Cversion="1.2.2" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_watch_face_01.h" version="1.2.2">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_watch_face_01.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_watch_face_01.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Watch Face 01" Cvendor="ARM" Cversion="1.2.2" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_waveform.c" version="2.1.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_waveform.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_waveform.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Waveform" Cvendor="ARM" Cversion="2.1.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_waveform.h" version="2.1.0">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_waveform.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_waveform.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Waveform" Cvendor="ARM" Cversion="2.1.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\arm_2d_scene_zhrgb565.c" version="2.2.2">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_zhrgb565.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_zhrgb565.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Showing Animation with zhRGB565" Cvendor="ARM" Cversion="1.0.0" condition="Arm-2D-Demo-zhRGB565-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\arm_2d_scene_zhrgb565.h" version="2.2.2">
-        <instance index="0">RTE\Acceleration\arm_2d_scene_zhrgb565.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\arm_2d_scene_zhrgb565.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Showing Animation with zhRGB565" Cvendor="ARM" Cversion="1.0.0" condition="Arm-2D-Demo-zhRGB565-Loader"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\common\opcodes\arm_2d_user_opcode_draw_circle.c" version="1.1.0">
         <instance index="0">RTE\Acceleration\arm_2d_user_opcode_draw_circle.c</instance>
@@ -1314,20 +1086,16 @@
         </targetInfos>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\mask_generation\circle_mask_generator.c" version="1.2.0">
-        <instance index="0">RTE\Acceleration\circle_mask_generator.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\circle_mask_generator.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Mask Generator" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="header" name="examples\demos\mask_generation\circle_mask_generator.h" version="1.2.0">
-        <instance index="0">RTE\Acceleration\circle_mask_generator.h</instance>
+        <instance index="0" removed="1">RTE\Acceleration\circle_mask_generator.h</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Mask Generator" Cvendor="ARM" Cversion="1.2.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\doge_dance.c" version="3.0.0">
         <instance index="0" removed="1">RTE\Acceleration\doge_dance.c</instance>
@@ -1336,20 +1104,16 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\film_mask.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\film_mask.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\film_mask.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Radars" Cvendor="ARM" Cversion="3.6.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\girl_dance.c" version="3.0.0">
-        <instance index="0">RTE\Acceleration\girl_dance.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\girl_dance.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Radars" Cvendor="ARM" Cversion="3.6.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="utility" name="tools\img2c.py" version="1.3.0">
         <instance index="0">RTE\Acceleration\img2c.py</instance>
@@ -1360,12 +1124,10 @@
         </targetInfos>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\pitch_scale_marker.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\pitch_scale_marker.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\pitch_scale_marker.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\radar_background.c" version="1.0.0">
         <instance index="0" removed="1">RTE\Acceleration\radar_background.c</instance>
@@ -1374,20 +1136,16 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\ring_indicator.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\ring_indicator.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\ring_indicator.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Ring Indicator" Cvendor="ARM" Cversion="1.1.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\roll_scale_marker.c" version="1.1.0">
-        <instance index="0">RTE\Acceleration\roll_scale_marker.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\roll_scale_marker.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\rounded_square.c" version="1.0.0">
         <instance index="0" removed="1">RTE\Acceleration\rounded_square.c</instance>
@@ -1402,28 +1160,22 @@
         <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\solid_line.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\solid_line.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\solid_line.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\solid_square.c" version="2.0.0">
-        <instance index="0">RTE\Acceleration\solid_square.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\solid_square.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Flight Attitude Instrument" Cvendor="ARM" Cversion="1.4.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="sourceC" name="examples\demos\space_fleet.c" version="1.0.0">
-        <instance index="0">RTE\Acceleration\space_fleet.c</instance>
+        <instance index="0" removed="1">RTE\Acceleration\space_fleet.c</instance>
         <component Cclass="Acceleration" Cgroup="Arm-2D Demos" Csub="Space Badge" Cvendor="ARM" Cversion="2.0.0" condition="Arm-2D-Demos"/>
         <package name="Arm-2D" schemaVersion="1.7.37" url="https://www.keil.com/pack/" vendor="ARM" version="9.9.99"/>
-        <targetInfos>
-          <targetInfo name="AC6-flash"/>
-        </targetInfos>
+        <targetInfos/>
       </file>
       <file attr="config" category="utility" name="tools\ttf2c.py" version="2.4.1">
         <instance index="0">RTE\Acceleration\ttf2c.py</instance>

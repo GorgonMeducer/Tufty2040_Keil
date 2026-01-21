@@ -22,228 +22,18 @@
 #include "arm_2d.h"
 #include "arm_2d_helper.h"
 #include "arm_2d_disp_adapters.h"
-#include "arm_2d_scenes.h"
-#include "arm_2d_demos.h"
-
-#ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
-#   include "arm_2d_benchmark.h"
-#endif
-
-#include "arm_2d_scene_histogram.h"
-#include "arm_2d_scene_meter.h"
-#include "arm_2d_scene_bubble_charging.h"
-
+#include "arm_2d_example_controls.h"
 
 /*============================ MACROS ========================================*/
+#undef this
+#define this (*ptThis)
+
 /*============================ MACROFIED FUNCTIONS ===========================*/
 /*============================ TYPES =========================================*/
 /*============================ GLOBAL VARIABLES ==============================*/
 /*============================ LOCAL VARIABLES ===============================*/
 /*============================ PROTOTYPES ====================================*/
 /*============================ IMPLEMENTATION ================================*/
-
-
-void scene_rickrolling_loader(void) 
-{
-    arm_2d_scene_rickrolling_init(&DISP0_ADAPTER);
-}
-
-void scene_zhrgb565_loader(void) 
-{
-    arm_2d_scene_zhrgb565_init(&DISP0_ADAPTER);
-}
-
-void scene_tjpgd_loader(void) 
-{
-    arm_2d_scene_tjpgd_init(&DISP0_ADAPTER);
-}
-
-void scene_qoi_loader(void) 
-{
-    arm_2d_scene_qoi_init(&DISP0_ADAPTER);
-}
-
-void scene_radars_loader(void) 
-{
-    arm_2d_scene_radars_init(&DISP0_ADAPTER);
-}
-
-void scene_blink_loader(void) 
-{
-    arm_2d_scene_blink_init(&DISP0_ADAPTER);
-}
-
-void scene_mask_generator_loader(void) 
-{
-    arm_2d_scene_mask_generation_init(&DISP0_ADAPTER);
-}
-
-void scene_flight_attitude_instrument_loader(void) 
-{
-    arm_2d_scene_flight_attitude_instrument_init(&DISP0_ADAPTER);
-}
-
-void scene_panel_loader(void) 
-{
-    arm_2d_scene_panel_init(&DISP0_ADAPTER);
-}
-
-void scene_histogram_loader(void) 
-{
-    arm_2d_scene_histogram_init(&DISP0_ADAPTER);
-}
-
-void scene_meter_loader(void) 
-{
-    arm_2d_scene_meter_init(&DISP0_ADAPTER);
-}
-
-void scene_qrcode_loader(void) 
-{
-    arm_2d_scene_qrcode_init(&DISP0_ADAPTER);
-}
-
-void scene_user_defined_opcode_loader(void) 
-{
-    arm_2d_scene_user_defined_opcode_init(&DISP0_ADAPTER);
-}
-
-void scene_space_badge_loader(void) 
-{
-    arm_2d_scene_space_badge_init(&DISP0_ADAPTER);
-}
-
-void scene_music_player_loader(void) 
-{
-    arm_2d_scene_music_player_init(&DISP0_ADAPTER);
-}
-
-void scene_bubble_charging_loader(void) 
-{
-    arm_2d_scene_bubble_charging_init(&DISP0_ADAPTER);
-}
-
-void scene_gas_gauge_loader(void) 
-{
-    arm_2d_scene_gas_gauge_init(&DISP0_ADAPTER);
-}
-
-void scene_watch_face_01_loader(void) 
-{
-    arm_2d_scene_watch_face_01_init(&DISP0_ADAPTER);
-}
-
-void scene_matrix_loader(void) 
-{
-    arm_2d_scene_matrix_init(&DISP0_ADAPTER);
-}
-
-void scene_ring_indicator_loader(void) 
-{
-    arm_2d_scene_ring_indicator_init(&DISP0_ADAPTER);
-}
-
-void scene_waveform_loader(void) 
-{
-    arm_2d_scene_waveform_init(&DISP0_ADAPTER);
-}
-
-void scene_virtual_resource_loader(void) 
-{
-    arm_2d_scene_virtual_resource_init(&DISP0_ADAPTER);
-}
-
-
-typedef struct demo_scene_t {
-    int32_t nLastInMS;
-    void (*fnLoader)(void);
-} demo_scene_t;
-
-static demo_scene_t const c_SceneLoaders[] = {
-
-#if 1
-    {
-        20000,
-        scene_radars_loader,
-    },
-    {
-        20000,
-        scene_blink_loader,
-    },
-    {
-        20000,
-        scene_space_badge_loader,
-    },
-#else
-    {
-        .fnLoader = 
-        scene_zhrgb565_loader,
-        //scene_bubble_charging_loader,
-        //scene_watch_face_01_loader,
-        //scene_waveform_loader,
-        //scene_mask_generator_loader,
-        //scene_ring_indicator_loader,
-        //scene_meter_loader,
-        //scene_histogram_loader,
-        //scene_blink_loader,
-        //scene_histogram_loader,
-        //scene_flight_attitude_instrument_loader,
-        //scene_radars_loader,
-        //scene_music_player_loader,
-        //scene_meter_loader,
-        //scene_histogram_loader,
-        //scene_rickrolling_loader,
-        //scene_space_badge_loader,
-        //scene_qrcode_loader,
-        //scene_mono_clock_loader
-    },
-#endif
-
-};
-
-static
-struct {
-    int8_t chIndex;
-    bool bIsTimeout;
-    int32_t nDelay;
-    int64_t lTimeStamp;
-    
-} s_tDemoCTRL = {
-    .chIndex = -1,
-    .bIsTimeout = true,
-};
-
-/* load scene one by one */
-void before_scene_switching_handler(void *pTarget,
-                                    arm_2d_scene_player_t *ptPlayer,
-                                    arm_2d_scene_t *ptScene)
-{
-
-    switch (arm_2d_scene_player_get_switching_status(&DISP0_ADAPTER)) {
-        case ARM_2D_SCENE_SWITCH_STATUS_MANUAL_CANCEL:
-            s_tDemoCTRL.chIndex--;
-            break;
-        default:
-            s_tDemoCTRL.chIndex++;
-            break;
-    }
-
-    if (s_tDemoCTRL.chIndex >= dimof(c_SceneLoaders)) {
-        s_tDemoCTRL.chIndex = 0;
-    } else if (s_tDemoCTRL.chIndex < 0) {
-        s_tDemoCTRL.chIndex += dimof(c_SceneLoaders);
-    }
-
-    /* call loader */
-    arm_with(const demo_scene_t, &c_SceneLoaders[s_tDemoCTRL.chIndex]) {
-        if (_->nLastInMS > 0) {
-            s_tDemoCTRL.bIsTimeout = false;
-            s_tDemoCTRL.lTimeStamp = 0;
-            s_tDemoCTRL.nDelay = _->nLastInMS;
-        }
-        _->fnLoader();
-    }
-}
 
 
 static void system_init(void)
@@ -254,6 +44,186 @@ static void system_init(void)
     disp_adapter0_init();
 
 }
+
+void disp_adapter_nano_draw_example_blocking_version(void)
+{
+    /* on frame start */
+    do {
+        
+    } while(0);
+
+    DISP_ADAPTER0_NANO_DRAW() {
+
+        arm_2d_canvas(ptTile, __top_canvas) {
+            
+            arm_lcd_text_set_colour(GLCD_COLOR_RED, GLCD_COLOR_WHITE);
+            arm_lcd_printf_label(ARM_2D_ALIGN_CENTRE, "Arm-2D Nano Mode");
+           
+        }
+    }
+
+    /* on frame complete */
+    do {
+
+    } while(0);
+}
+
+
+
+void draw_gasgauge(void)
+{
+
+    struct {
+        int64_t lTimestamp[1];
+        battery_liquid_t    tBatteryLiquid;
+        uint16_t            hwGasgauge;
+        battery_status_t    tStatus;
+        bool bOnLoad;
+    }static s_tLocal = {.bOnLoad = true,}, *ptThis = &s_tLocal;
+
+    if (this.bOnLoad) {
+        this.bOnLoad = false;
+        
+        battery_gasgauge_liquid_init(&this.tBatteryLiquid);
+    }
+    
+
+    /* on frame start */
+    do {
+        int32_t nResult;
+        
+        /* simulate a full battery charging/discharge cycle */
+        arm_2d_helper_time_cos_slider(0, 1000, 30000, 0, &nResult, &this.lTimestamp[0]);
+        
+        if (this.hwGasgauge < nResult) {
+            this.tStatus = BATTERY_STATUS_CHARGING;
+        } else if (this.hwGasgauge > nResult) {
+            this.tStatus = BATTERY_STATUS_DISCHARGING;
+        }
+        this.hwGasgauge = (uint16_t)nResult;
+    } while(0);
+
+    DISP_ADAPTER0_NANO_DRAW() {
+
+        arm_2d_canvas(ptTile, __top_canvas) {
+            
+            arm_2d_align_centre(__top_canvas, 64, 100) {
+            
+                battery_gasgauge_liquid_show(   &this.tBatteryLiquid, 
+                                                ptTile, 
+                                                &__centre_region, 
+                                                this.hwGasgauge,
+                                                this.tStatus,
+                                                bIsNewFrame);
+                
+                arm_2d_helper_dirty_region_update_item( 
+                    &ptScene->tDirtyRegionHelper.tDefaultItem,
+                    ptTile,
+                    &__top_canvas,
+                    &__centre_region);
+                
+                ARM_2D_OP_WAIT_ASYNC();
+            
+            }
+           
+        }
+    }
+
+    /* on frame complete */
+    do {
+
+    } while(0);
+}
+
+
+arm_fsm_rt_t draw_clock(void)
+{
+    struct {
+        uint8_t chPT;
+        uint8_t chHour;
+        uint8_t chMin;
+        uint8_t chSec;
+        uint8_t chTenMs;
+
+    }s_tLocal, *ptThis = &s_tLocal;
+
+ARM_PT_BEGIN(this.chPT)
+
+    /* on frame start */
+    do {
+        int64_t lTimeStampInMs = arm_2d_helper_convert_ticks_to_ms(
+                                    arm_2d_helper_get_system_timestamp());
+
+        /* calculate the hours */
+        do {
+            uint_fast8_t chHour = lTimeStampInMs / (3600ul * 1000ul);
+            chHour %= 24;
+            this.chHour = chHour;
+            lTimeStampInMs %= (3600ul * 1000ul);
+        } while(0);
+
+        /* calculate the Minutes */
+        do {
+            uint_fast8_t chMin = lTimeStampInMs / (60ul * 1000ul);
+            this.chMin = chMin;
+            lTimeStampInMs %= (60ul * 1000ul);
+        } while(0);
+
+        /* calculate the Seconds */
+        do {
+            uint_fast8_t chSec = lTimeStampInMs / (1000ul);
+            this.chSec = chSec;
+            lTimeStampInMs %= (1000ul);
+        } while(0);
+
+        /* calculate the Ten-Miliseconds */
+        do {
+            uint_fast8_t chTenMs = lTimeStampInMs / (10ul);
+            this.chTenMs = chTenMs;
+        } while(0);
+    } while(0);
+
+
+    DISP_ADAPTER0_NANO_DRAW() {
+ 
+        extern const arm_2d_tile_t c_tileCMSISLogoA4Mask;
+
+        arm_2d_canvas(ptTile, __top_canvas) {
+
+            arm_lcd_text_reset_display_region_tracking();
+            
+            arm_lcd_text_set_colour(GLCD_COLOR_WHITE, GLCD_COLOR_WHITE);
+            arm_lcd_printf_label(
+                ARM_2D_ALIGN_CENTRE, 
+                "%02d:%02d:%02d:%02d", 
+                this.chHour,
+                this.chMin,
+                this.chSec,
+                this.chTenMs);
+            
+            arm_2d_region_t *ptTextRegion =  arm_lcd_text_get_last_display_region();
+
+            arm_2d_helper_dirty_region_update_item( 
+                &ptScene->tDirtyRegionHelper.tDefaultItem,
+                ptTile,
+                &__top_canvas,
+                ptTextRegion);
+        }
+
+        /* You can ONLY yield here */
+        ARM_PT_YIELD(arm_fsm_rt_on_going);
+    }
+
+    /* on frame complete */
+    do {
+
+    } while(0);
+
+ARM_PT_END()
+
+    return arm_fsm_rt_cpl;
+}
+
 
 
 int main(void) 
@@ -268,27 +238,31 @@ int main(void)
     printf("\r\nRun Coremark 1.0...\r\n");
     coremark_main();
 #endif
-#ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
-    arm_2d_run_benchmark();
-#else
-    arm_2d_scene_player_register_before_switching_event_handler(
-            &DISP0_ADAPTER,
-            before_scene_switching_handler);
-            
-    arm_2d_scene_player_switch_to_next_scene(&DISP0_ADAPTER);
-#endif
+
+    /* prepare and change canvas colour */
+    disp_adapter0_nano_prepare()->tCanvas.wColour = GLCD_COLOR_GREEN;
+
+    /* draw one frame */
+    disp_adapter_nano_draw_example_blocking_version();
+    
+    perfc_delay_ms(1000);
+
+    /* NOTE: 
+     * 1. Please do NOT call disp_adapter0_nano_prepare() for each frame. 
+     *    Usually you just need to call it once.
+     * 2. You can call disp_adapter0_nano_prepare() at anytime to get 
+     *    the ONLY and Default scene instance. 
+     */
+    arm_2d_scene_t *ptScene = disp_adapter0_get_default_scene();
+    ptScene->tCanvas.wColour = GLCD_COLOR_BLACK;
+    ptScene->bUseDirtyRegionHelper = true;
+
+    disp_adapter0_nano_prepare();
+
     while (true) {
 
-        disp_adapter0_task(60);
-
-        if (!s_tDemoCTRL.bIsTimeout) {
-
-            if (arm_2d_helper_is_time_out(s_tDemoCTRL.nDelay, &s_tDemoCTRL.lTimeStamp)) {
-                s_tDemoCTRL.bIsTimeout = true;
-
-                arm_2d_scene_player_switch_to_next_scene(&DISP0_ADAPTER);
-            }
-        }
+        draw_clock();
+        //draw_gasgauge();
 
     }
     //return 0;
