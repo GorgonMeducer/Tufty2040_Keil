@@ -224,7 +224,11 @@ ARM_PT_END()
     return arm_fsm_rt_cpl;
 }
 
-
+static
+arm_2d_scene_t s_tGasgauge = {
+    .tCanvas.wColour = GLCD_COLOR_BLACK,
+    .bUseDirtyRegionHelper = true,
+};
 
 int main(void) 
 {
@@ -239,13 +243,19 @@ int main(void)
     coremark_main();
 #endif
 
-//    /* prepare and change canvas colour */
-//    disp_adapter0_nano_prepare()->tCanvas.wColour = GLCD_COLOR_GREEN;
+    do {
+        arm_2d_scene_t *ptScene = disp_adapter0_get_default_scene();
 
-//    /* draw one frame */
-//    disp_adapter_nano_draw_example_blocking_version();
-//    
-//    perfc_delay_ms(1000);
+        /* change canvas colour */
+        ptScene->tCanvas.wColour = GLCD_COLOR_GREEN;
+        
+        disp_adapter0_nano_prepare();
+
+        /* draw one frame */
+        disp_adapter_nano_draw_example_blocking_version();
+        
+        perfc_delay_ms(1000);
+    } while(0);
 
     /* NOTE: 
      * 1. Please do NOT call disp_adapter0_nano_prepare() for each frame. 
@@ -253,11 +263,14 @@ int main(void)
      * 2. You can call disp_adapter0_nano_prepare() at anytime to get 
      *    the ONLY and Default scene instance. 
      */
-    arm_2d_scene_t *ptScene = disp_adapter0_get_default_scene();
-    ptScene->tCanvas.wColour = GLCD_COLOR_BLACK;
-    ptScene->bUseDirtyRegionHelper = true;
+    
+//    arm_2d_scene_t *ptScene = disp_adapter0_get_default_scene();
+//    ptScene->tCanvas.wColour = GLCD_COLOR_BLACK;
+//    ptScene->bUseDirtyRegionHelper = true;
 
-    disp_adapter0_nano_prepare();
+    
+
+    disp_adapter0_nano_prepare(&s_tGasgauge);
 
     while (true) {
 

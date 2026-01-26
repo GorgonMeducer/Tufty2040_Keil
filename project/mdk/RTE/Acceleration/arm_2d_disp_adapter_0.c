@@ -951,10 +951,14 @@ arm_2d_scene_t *disp_adapter0_get_default_scene(void)
     return &s_tDefaultScene;
 }
 
+#if __DISP0_CFG_NANO_ONLY__
+static arm_2d_scene_t *s_ptCurrentScene = &s_tDefaultScene;
+#endif
+
 arm_2d_scene_t *disp_adapter0_get_current_scene(void)
 {
 #if __DISP0_CFG_NANO_ONLY__
-    return disp_adapter0_get_default_scene();
+    return s_ptCurrentScene;
 #else
     return arm_2d_scene_player_get_the_current_scene(&DISP0_ADAPTER);
 #endif
@@ -977,7 +981,7 @@ void disp_adapter0_init(void)
 
     DISP0_ADAPTER.Benchmark.lTimestamp = arm_2d_helper_get_system_timestamp();
 
-#if !__DISP0_CFG_DISABLE_DEFAULT_SCENE__
+#if !__DISP0_CFG_DISABLE_DEFAULT_SCENE__ && !__DISP0_CFG_NANO_ONLY__
     do {
         arm_2d_scene_player_append_scenes( 
                                         &DISP0_ADAPTER,
@@ -1023,9 +1027,6 @@ arm_fsm_rt_t __disp_adapter0_task(void)
 {
 #if __DISP0_CFG_NANO_ONLY__
     arm_2d_scene_t *ptScene = disp_adapter0_get_current_scene();
-    __arm_2d_helper_pfb_enable_drawing_canvas_colour(
-                                                &DISP0_ADAPTER.use_as__arm_2d_helper_pfb_t,
-                                                ptScene->tCanvas);
 
     return arm_2d_helper_pfb_task(
                 &DISP0_ADAPTER.use_as__arm_2d_helper_pfb_t, 
@@ -1040,6 +1041,8 @@ arm_2d_scene_t *__disp_adapter0_nano_prepare(arm_2d_scene_t *ptScene)
     if (NULL == ptScene) {
         ptScene = disp_adapter0_get_default_scene();
     }
+    s_ptCurrentScene = ptScene;
+
     ptScene->fnBackground = NULL;
     ptScene->fnScene = NULL;
     arm_2d_helper_dirty_region_depose(&ptScene->tDirtyRegionHelper);
@@ -1059,6 +1062,10 @@ arm_2d_scene_t *__disp_adapter0_nano_prepare(arm_2d_scene_t *ptScene)
         arm_2d_helper_dirty_region_init(&ptScene->tDirtyRegionHelper,
                                         &ptScene->ptDirtyRegion);
     }
+
+    __arm_2d_helper_pfb_enable_drawing_canvas_colour(
+                                    &DISP0_ADAPTER.use_as__arm_2d_helper_pfb_t,
+                                    ptScene->tCanvas);
 #else
     arm_2d_scene_player_flush_fifo(&DISP0_ADAPTER);
     arm_2d_scene_player_set_switching_mode( &DISP0_ADAPTER, 
