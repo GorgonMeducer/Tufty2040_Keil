@@ -24,6 +24,8 @@
 #include "arm_2d_disp_adapters.h"
 #include "arm_2d_example_controls.h"
 
+#include "cmsis_version.h"
+
 /*============================ MACROS ========================================*/
 #undef this
 #define this (*ptThis)
