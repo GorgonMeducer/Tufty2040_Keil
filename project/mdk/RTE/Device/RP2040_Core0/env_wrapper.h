@@ -208,4 +208,11 @@ typedef uint16_t __uint16_t;
 #define SYS_CLK_KHZ                         (250 * KHZ)
 #endif
 
+#if 0 /* a configuration for over-clocking to 250MHz */
+#define PLL_SYS_POSTDIV2                    5
+#define PLL_SYS_POSTDIV1                    5
+#define PLL_SYS_VCO_FREQ_KHZ                (1200 * KHZ)
+#define SYS_CLK_KHZ                         (48 * KHZ)
+#endif
+
 #endif

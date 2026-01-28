@@ -63,6 +63,11 @@ void scene_qoi_loader(void)
     arm_2d_scene_qoi_init(&DISP0_ADAPTER);
 }
 
+void scene_qoi_animation_loader(void) 
+{
+    arm_2d_scene_qoi_animation_init(&DISP0_ADAPTER);
+}
+
 void scene_radars_loader(void) 
 {
     arm_2d_scene_radars_init(&DISP0_ADAPTER);
@@ -177,7 +182,9 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_zhrgb565_loader,
+        scene_radars_loader,
+        //scene_qoi_loader
+        //scene_zhrgb565_loader,
         //scene_bubble_charging_loader,
         //scene_watch_face_01_loader,
         //scene_waveform_loader,
@@ -191,7 +198,6 @@ static demo_scene_t const c_SceneLoaders[] = {
         //scene_radars_loader,
         //scene_music_player_loader,
         //scene_meter_loader,
-        //scene_histogram_loader,
         //scene_rickrolling_loader,
         //scene_space_badge_loader,
         //scene_qrcode_loader,

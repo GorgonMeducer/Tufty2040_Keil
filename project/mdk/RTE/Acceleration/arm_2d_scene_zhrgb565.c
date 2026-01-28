@@ -22,7 +22,7 @@
 #include "arm_2d_scene_zhrgb565.h"
 
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB)                                 \
-&&  defined(RTE_Acceleration_Arm_2D_Extra_JPEG_Loader)
+&&  defined(RTE_Acceleration_Arm_2D_Extra_zhRGB565_Loader)
 
 #include <stdlib.h>
 #include <string.h>
@@ -147,6 +147,14 @@ static void __on_scene_zhrgb565_frame_start(arm_2d_scene_t *ptScene)
     if (arm_2d_helper_is_time_out( this.tFilm.hwPeriodPerFrame , &this.lTimestamp[0])) {
 
         arm_2d_helper_film_next_frame(&this.tFilm);
+
+        arm_2d_helper_dirty_region_item_suspend_update(
+            &this.use_as__arm_2d_scene_t.tDirtyRegionHelper.tDefaultItem,
+            false);
+    } else {
+        arm_2d_helper_dirty_region_item_suspend_update(
+            &this.use_as__arm_2d_scene_t.tDirtyRegionHelper.tDefaultItem,
+            true);
     }
 
     arm_zhrgb565_loader_on_frame_start(&this.tAnimation);
@@ -276,16 +284,16 @@ user_scene_zhrgb565_t *__arm_2d_scene_zhrgb565_init(   arm_2d_scene_player_t *pt
 
     #if __ARM_2D_ZHRGB565_USE_LOADER_IO__
         
-    #if 1
+    #if 0
         arm_loader_io_cache_init(   &this.LoaderIO.tCache, 
                                     (uintptr_t)c_zhrgbDogeDance, 
                                     sizeof(c_zhrgbDogeDance),
                                     this.tCachelines,
                                     dimof(this.tCachelines));
     #else
-        arm_loader_io_binary_init(  &this.LoaderIO.tBinary, 
-                                    (uint8_t *)c_zhrgbDogeDance, 
-                                    sizeof(c_zhrgbDogeDance));
+        arm_loader_io_rom_init( &this.LoaderIO.tROM, 
+                                (uintptr_t)c_zhrgbDogeDance, 
+                                sizeof(c_zhrgbDogeDance));
     #endif
     #endif
         arm_zhrgb565_loader_cfg_t tCFG = {
@@ -293,12 +301,12 @@ user_scene_zhrgb565_t *__arm_2d_scene_zhrgb565_init(   arm_2d_scene_player_t *pt
         
         #if __ARM_2D_ZHRGB565_USE_LOADER_IO__
             .ImageIO = {
-            #if 1
+            #if 0
                 .ptIO = &ARM_LOADER_IO_CACHE,
                 .pTarget = (uintptr_t)&this.LoaderIO.tCache,
             #else
-                .ptIO = &ARM_LOADER_IO_BINARY,
-                .pTarget = (uintptr_t)&this.LoaderIO.tBinary,
+                .ptIO = &ARM_LOADER_IO_ROM,
+                .pTarget = (uintptr_t)&this.LoaderIO.tROM,
             #endif
             },
         #else

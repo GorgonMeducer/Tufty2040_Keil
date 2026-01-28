@@ -26,7 +26,7 @@
 #endif
 
 #if defined(RTE_Acceleration_Arm_2D_Helper_PFB)                                 \
-&&  defined(RTE_Acceleration_Arm_2D_Extra_JPEG_Loader)
+&&  defined(RTE_Acceleration_Arm_2D_Extra_zhRGB565_Loader)
 
 #include "arm_2d_helper.h"
 #include "arm_2d_example_controls.h"
@@ -96,6 +96,7 @@ ARM_PRIVATE(
     union {
         arm_loader_io_file_t tFile;
         arm_loader_io_binary_t tBinary;
+        arm_loader_io_rom_t tROM;
         arm_loader_io_cache_t tCache;
     } LoaderIO;
 
