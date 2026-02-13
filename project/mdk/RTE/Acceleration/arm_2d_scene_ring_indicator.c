@@ -281,6 +281,7 @@ RING_INDICATION_USER_DRAW(__user_draw_pointer)
     ARM_2D_PARAM(ptPivot);
     ARM_2D_PARAM(pTarget);
     ARM_2D_PARAM(bIsNewFrame);
+    ARM_2D_PARAM(ptRingIndicator);
 
     spin_zoom_widget_t *ptHelper = (spin_zoom_widget_t *)pTarget;
 
@@ -493,11 +494,13 @@ user_scene_ring_indicator_t *__arm_2d_scene_ring_indicator_init(
                 .ptIO = &ARM_QOI_IO_FILE_LOADER,
                 .pTarget = (uintptr_t)&this.QOI[QOI_IDX_BACKGROUND_RING].LoaderIO.tFile,
             },
-        #else
+        #elif __ARM_QOI_USE_LOADER_IO__
             .ImageIO = {
                 .ptIO = &ARM_QOI_IO_BINARY_LOADER,
                 .pTarget = (uintptr_t)&this.QOI[QOI_IDX_BACKGROUND_RING].LoaderIO.tBinary,
             },
+        #else
+            .pchQOISource = c_qoiThreeQuarterRing,
         #endif
         };
 
@@ -528,11 +531,13 @@ user_scene_ring_indicator_t *__arm_2d_scene_ring_indicator_init(
                 .ptIO = &ARM_QOI_IO_FILE_LOADER,
                 .pTarget = (uintptr_t)&this.QOI[QOI_IDX_FOREGROUND].LoaderIO.tFile,
             },
-        #else
+        #elif __ARM_QOI_USE_LOADER_IO__
             .ImageIO = {
                 .ptIO = &ARM_QOI_IO_BINARY_LOADER,
                 .pTarget = (uintptr_t)&this.QOI[QOI_IDX_FOREGROUND].LoaderIO.tBinary,
             },
+        #else
+            .pchQOISource = c_qoiRingIndicator,
         #endif
         };
 
@@ -541,9 +546,8 @@ user_scene_ring_indicator_t *__arm_2d_scene_ring_indicator_init(
 #endif
 
     do {
-        int16_t iRadius = (float)c_tileWhiteDotMiddleMask.tRegion.tSize.iWidth 
-                        - (float)INDICATION_IMAGE.tRegion.tSize.iWidth / 2.0f
-                        - 4;
+        int16_t iRadius = (float)(c_tileWhiteDotMiddleMask.tRegion.tSize.iWidth - 2)
+                        - (float)INDICATION_IMAGE.tRegion.tSize.iWidth / 2.0f;
 
         spin_zoom_widget_cfg_t tCFG = {
             .Indicator = {

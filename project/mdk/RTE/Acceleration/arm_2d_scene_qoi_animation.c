@@ -109,7 +109,7 @@ static void __on_scene_qoi_animation_depose(arm_2d_scene_t *ptScene)
     user_scene_qoi_animation_t *ptThis = (user_scene_qoi_animation_t *)ptScene;
     ARM_2D_UNUSED(ptThis);
     
-    arm_qoi_loader_on_load(&this.tAnimation);
+    arm_qoi_loader_depose(&this.tAnimation);
 
     arm_foreach(int64_t,this.lTimestamp, ptItem) {
         *ptItem = 0;
@@ -283,7 +283,7 @@ user_scene_qoi_animation_t *__arm_2d_scene_qoi_animation_init(   arm_2d_scene_pl
         extern const uint8_t c_qoiDogeDance[126958];
 
         
-    #if 0
+    #if 1
         arm_loader_io_cache_init(   &this.LoaderIO.tCache, 
                                     (uintptr_t)c_qoiDogeDance, 
                                     sizeof(c_qoiDogeDance),
@@ -308,8 +308,9 @@ user_scene_qoi_animation_t *__arm_2d_scene_qoi_animation_init(   arm_2d_scene_pl
             //.bForceDisablePreBlendwithBG = true,
             //.tBackgroundColour.wColour = this.use_as__arm_2d_scene_t.tCanvas.wColour,
 
+        #if __ARM_QOI_USE_LOADER_IO__
             .ImageIO = {
-            #if 0
+            #if 1
                 .ptIO = &ARM_LOADER_IO_CACHE,
                 .pTarget = (uintptr_t)&this.LoaderIO.tCache,
             #else
@@ -317,6 +318,9 @@ user_scene_qoi_animation_t *__arm_2d_scene_qoi_animation_init(   arm_2d_scene_pl
                 .pTarget = (uintptr_t)&this.LoaderIO.tROM,
             #endif
             },
+        #else
+            .pchQOISource = c_qoiDogeDance,
+        #endif
         };
 
         arm_qoi_loader_init(&this.tAnimation, &tCFG);

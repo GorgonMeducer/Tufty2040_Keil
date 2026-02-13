@@ -201,7 +201,7 @@ typedef uint16_t __uint16_t;
 
 #include "pico/platform.h"
 
-#if 1 /* a configuration for over-clocking to 250MHz */
+#if 0 /* a configuration for over-clocking to 250MHz */
 #define PLL_SYS_POSTDIV2                    1
 #define PLL_SYS_POSTDIV1                    6
 #define PLL_SYS_VCO_FREQ_KHZ                (1500 * KHZ)
@@ -215,4 +215,10 @@ typedef uint16_t __uint16_t;
 #define SYS_CLK_KHZ                         (48 * KHZ)
 #endif
 
+#if 1 /* a configuration for over-clocking to 250MHz */
+#define PLL_SYS_POSTDIV2                    3
+#define PLL_SYS_POSTDIV1                    6
+#define PLL_SYS_VCO_FREQ_KHZ                (1200 * KHZ)
+#define SYS_CLK_KHZ                         (64 * KHZ)
+#endif
 #endif

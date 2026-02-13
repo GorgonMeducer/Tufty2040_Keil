@@ -24,6 +24,7 @@
 #include "arm_2d_disp_adapters.h"
 #include "arm_2d_scenes.h"
 #include "arm_2d_demos.h"
+#include "arm_2d_render_tests.h"
 
 #ifdef RTE_Acceleration_Arm_2D_Extra_Benchmark
 #   include "arm_2d_benchmark.h"
@@ -51,6 +52,16 @@ void scene_rickrolling_loader(void)
 void scene_zhrgb565_loader(void) 
 {
     arm_2d_scene_zhrgb565_init(&DISP0_ADAPTER);
+}
+
+void scene_lmsk_loader(void) 
+{
+    arm_2d_scene_lmsk_init(&DISP0_ADAPTER);
+}
+
+void scene_large_lmsk_loader(void) 
+{
+    arm_2d_scene_large_lmsk_init(&DISP0_ADAPTER);
 }
 
 void scene_tjpgd_loader(void) 
@@ -148,6 +159,11 @@ void scene_ring_indicator_loader(void)
     arm_2d_scene_ring_indicator_init(&DISP0_ADAPTER);
 }
 
+void scene_warped_dial_loader(void) 
+{
+    arm_2d_scene_warped_dial_init(&DISP0_ADAPTER);
+}
+
 void scene_waveform_loader(void) 
 {
     arm_2d_scene_waveform_init(&DISP0_ADAPTER);
@@ -166,7 +182,7 @@ typedef struct demo_scene_t {
 
 static demo_scene_t const c_SceneLoaders[] = {
 
-#if 1
+#if 0
     {
         20000,
         scene_radars_loader,
@@ -182,7 +198,11 @@ static demo_scene_t const c_SceneLoaders[] = {
 #else
     {
         .fnLoader = 
-        scene_radars_loader,
+        scene_warped_dial_loader,
+        //scene_large_lmsk_loader,
+        //scene_qoi_animation_loader,
+        //scene_lmsk_loader,
+        //scene_radars_loader,
         //scene_qoi_loader
         //scene_zhrgb565_loader,
         //scene_bubble_charging_loader,
