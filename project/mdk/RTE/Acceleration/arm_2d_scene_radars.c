@@ -81,12 +81,13 @@
 
 #define LAST_STAND_DEFENCE_RADIUS   40
 
-#define RADAR_BACKGROUND        this.LMSK[RADAR_LMSK_BACKGROUND].tLoader.tTile
-#define RADAR_FILM_MASK         this.LMSK[RADAR_LMSK_FILM_MASK].tLoader.tTile
+#define RADAR_BACKGROUND        ARM_LMSK_TILE(RADAR_LMSK_BACKGROUND)
+#define RADAR_FILM_MASK         ARM_LMSK_TILE(RADAR_LMSK_FILM_MASK)
 
 #if ARM_2D_DEMO_RADAR_SHOW_ANIMATION  
-#   define FILM_TOP_LEFT        this.tFilm[FILM_IDX_TOP_LEFT].tHelper.use_as__arm_2d_tile_t
-#   define FILM_BOTTOM_RIGHT    this.tFilm[FILM_IDX_BOTTOM_RIGHT].tHelper.use_as__arm_2d_tile_t
+#   define FILM_TOP_LEFT        this.tFilm[FILM_IDX_TOP_LEFT].tHelper.tTile
+#   define FILM_BOTTOM_RIGHT    this.tFilm[FILM_IDX_BOTTOM_RIGHT].tHelper.tTile
+
 #endif
 
 #ifndef ARM_2D_DEMO_RADAR_DEBUG
@@ -179,9 +180,7 @@ static void __on_scene_radars_load(arm_2d_scene_t *ptScene)
 
     spin_zoom_widget_on_load(&this.tScanSector);
 
-    arm_foreach(this.LMSK) {
-        arm_lmsk_loader_on_load(&_->tLoader);
-    }
+    ARM_LMSK_GROUP_ON_LOAD();
 
     /* 
      * NOTE: this assignment only works after calling spin_zoom_widget_on_load()
@@ -250,9 +249,7 @@ static void __on_scene_radars_depose(arm_2d_scene_t *ptScene)
     
     spin_zoom_widget_depose(&this.tScanSector);
 
-    arm_foreach(this.LMSK) {
-        arm_lmsk_loader_depose(&_->tLoader);
-    }
+    ARM_LMSK_GROUP_DEPOSE();
 
     arm_foreach(__radar_bogey_t, this.tBogeys, ptBogey) {
         arm_2d_helper_dirty_region_remove_items(
@@ -398,9 +395,7 @@ static void __on_scene_radars_frame_start(arm_2d_scene_t *ptScene)
 
     spin_zoom_widget_on_frame_start(&this.tScanSector, nResult, 1.0f);
 
-    arm_foreach(this.LMSK) {
-        arm_lmsk_loader_on_frame_start(&_->tLoader);
-    }
+    ARM_LMSK_GROUP_ON_FRAME_START();
 
     foldable_panel_on_frame_start(&this.tScreen);
 
@@ -461,9 +456,7 @@ static void __on_scene_radars_frame_complete(arm_2d_scene_t *ptScene)
 
     spin_zoom_widget_on_frame_complete(&this.tScanSector);
 
-    arm_foreach(this.LMSK) {
-        arm_lmsk_loader_on_frame_complete(&_->tLoader);
-    }
+    ARM_LMSK_GROUP_ON_FRAME_COMPLETE();
 
     arm_foreach(__radar_bogey_t, this.tBogeys, ptBogey) {
         ptBogey->u2State = ptBogey->u2NextState;
@@ -1202,7 +1195,7 @@ user_scene_radars_t *__arm_2d_scene_radars_init(
 
     #if ARM_2D_DEMO_RADAR_SHOW_ANIMATION
         do {
-            extern const uint16_t c_zhrgbGirlDance[56183];
+            extern const uint16_t c_zhrgbGirlDance[56250];
 
             arm_loader_io_rom_init( &this.tAnimation[FILM_IDX_TOP_LEFT].LoaderIO.tROM, 
                                     (uintptr_t)c_zhrgbGirlDance, 
@@ -1236,7 +1229,7 @@ user_scene_radars_t *__arm_2d_scene_radars_init(
         } while(0);
     
         do {
-            extern const uint16_t c_zhrgbDogeDance[51166];
+            extern const uint16_t c_zhrgbDogeDance[51167];
 
             arm_loader_io_rom_init( &this.tAnimation[FILM_IDX_BOTTOM_RIGHT].LoaderIO.tROM, 
                                     (uintptr_t)c_zhrgbDogeDance, 
@@ -1332,53 +1325,39 @@ user_scene_radars_t *__arm_2d_scene_radars_init(
 
     /* initialize LMSK loader */
     do {
+        ARM_LMSK_ITEM_INIT_WITH_ROM(RADAR_LMSK_BACKGROUND, 
+                                    c_lmskRadarBackground, 
+                                    12559);
+    
+    #if 0   /* equivalent */
         extern const uint8_t c_lmskRadarBackground[12559];
 
         arm_loader_io_rom_init( &this.LMSK[RADAR_LMSK_BACKGROUND].LoaderIO.tROM, 
                                 (uintptr_t)c_lmskRadarBackground, 
                                 sizeof(c_lmskRadarBackground));
 
-        arm_lmsk_loader_cfg_t tCFG = {
-            //.bUseHeapForVRES = true,
-            .ptScene = (arm_2d_scene_t *)ptThis,
-
-        #if __ARM_LMSK_USE_LOADER_IO__
-            .ImageIO = {
-                .ptIO = &ARM_LOADER_IO_ROM,
-                .pTarget = (uintptr_t)&this.LMSK[RADAR_LMSK_BACKGROUND].LoaderIO.tROM,
-            },
-        #else
-            .pchLMSKSource = c_lmskRadarBackground,
-        #endif
-        };
-
-        arm_lmsk_loader_init(&this.LMSK[RADAR_LMSK_BACKGROUND].tLoader, &tCFG);
+        ARM_LMSK_ITEM_INIT(RADAR_LMSK_BACKGROUND, ROM, c_lmskRadarBackground);
+    #endif
     } while(0);
 
 #if ARM_2D_DEMO_RADAR_SHOW_ANIMATION
+
     /* initialize LMSK loader */
     do {
+
+        ARM_LMSK_ITEM_INIT_WITH_ROM(RADAR_LMSK_FILM_MASK, 
+                                    c_lmskFilmMask, 
+                                    2973);
+
+    #if 0
         extern const uint8_t c_lmskFilmMask[2973];
 
         arm_loader_io_rom_init( &this.LMSK[RADAR_LMSK_FILM_MASK].LoaderIO.tROM, 
                                 (uintptr_t)c_lmskFilmMask, 
                                 sizeof(c_lmskFilmMask));
 
-        arm_lmsk_loader_cfg_t tCFG = {
-            //.bUseHeapForVRES = true,
-            .ptScene = (arm_2d_scene_t *)ptThis,
-
-        #if __ARM_LMSK_USE_LOADER_IO__
-            .ImageIO = {
-                .ptIO = &ARM_LOADER_IO_ROM,
-                .pTarget = (uintptr_t)&this.LMSK[RADAR_LMSK_FILM_MASK].LoaderIO.tROM,
-            },
-        #else
-            .pchLMSKSource = c_lmskFilmMask,
-        #endif
-        };
-
-        arm_lmsk_loader_init(&this.LMSK[RADAR_LMSK_FILM_MASK].tLoader, &tCFG);
+        ARM_LMSK_ITEM_INIT(RADAR_LMSK_FILM_MASK, ROM, c_lmskFilmMask);
+    #endif
     } while(0);
 
 

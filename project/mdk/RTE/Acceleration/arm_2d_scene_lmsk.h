@@ -112,15 +112,7 @@ ARM_PRIVATE(
     } Reference;
 #endif
 
-    struct {
-        arm_lmsk_loader_t tLoader;
-        union {
-            arm_loader_io_file_t tFile;
-            arm_loader_io_binary_t tBinary;
-            arm_loader_io_rom_t tROM;
-        } LoaderIO;
-    } LMSK;
-
+    ARM_LMSK_GROUP_DEF(1);
 
 )
     /* place your public member here */

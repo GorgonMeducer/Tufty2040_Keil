@@ -242,14 +242,7 @@ ARM_PRIVATE(
     } tFilm[__FILM_COUNT];
 #endif
 
-    struct {
-        arm_lmsk_loader_t tLoader;
-        union {
-            arm_loader_io_file_t tFile;
-            arm_loader_io_binary_t tBinary;
-            arm_loader_io_rom_t tROM;
-        } LoaderIO;
-    } LMSK[__RADAR_LMSK_COUNT];
+    ARM_LMSK_GROUP_DEF(__RADAR_LMSK_COUNT);
 
 )
     /* place your public member here */
